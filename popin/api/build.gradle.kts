@@ -1,10 +1,10 @@
 plugins {
-    kotlin("plugin.spring") version "1.9.22"
+    `kotlin-spring`()
 
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
+    `spring-boot`()
+    `spring-dependency-management`()
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation(`spring-boot-starter-web`)
 }
