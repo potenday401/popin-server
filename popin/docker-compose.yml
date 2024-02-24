@@ -1,0 +1,16 @@
+version: '1.0'
+
+services:
+  popin-database:
+    image: postgres:16.2
+    restart: always
+    container_name: "popin_database"
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: popin
+      POSTGRES_USER: popin
+      POSTGRES_PASSWORD: 1234
