@@ -6,6 +6,5 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":domain"))
     implementation(`spring-boot-starter-web`)
 }
