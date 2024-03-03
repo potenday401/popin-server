@@ -28,13 +28,3 @@ val PluginDependenciesSpec.`spring-dependency-management`: PluginDependencySpec
     get() = id("io.spring.dependency-management")
 fun PluginDependenciesSpec.`spring-dependency-management`(version: String = Versions.SPRING_DEPENDENCY_MANAGEMENT): PluginDependencySpec =
     `spring-dependency-management`.version(version)
-
-val PluginDependenciesSpec.`jooq-gradle-plugin`: PluginDependencySpec
-    get() = id("nu.studer.jooq")
-fun PluginDependenciesSpec.`jooq-gradle-plugin`(version: String = Versions.JOOQ_GRADLE_PLUGIN): PluginDependencySpec =
-    `jooq-gradle-plugin`.version(version)
-
-val PluginDependenciesSpec.`flyway-gradle-plugin`: PluginDependencySpec
-    get() = id("org.flywaydb.flyway")
-fun PluginDependenciesSpec.`flyway-gradle-plugin`(version: String = Versions.FLYWAY): PluginDependencySpec =
-    `flyway-gradle-plugin`.version(version)

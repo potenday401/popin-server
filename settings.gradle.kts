@@ -1,6 +1,5 @@
 rootProject.name = "popin"
 
 include(
-    "popin:api",
-    "domain"
+    "popin:api"
 )
