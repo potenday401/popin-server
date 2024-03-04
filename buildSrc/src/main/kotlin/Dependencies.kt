@@ -8,6 +8,18 @@ val `kotlin-stdlib`
 val `spring-boot-starter-web`
     get() = "org.springframework.boot:spring-boot-starter-web"
 
+val `jackson-module-kotlin`
+    get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+val `spring-boot-configuration-processor`
+    get() = "org.springframework.boot:spring-boot-configuration-processor"
+
+val `spring-boot-starter-security`
+    get() = "org.springframework.boot:spring-boot-starter-security"
+
+val `spring-boot-starter-jooq`
+    get() = "org.springframework.boot:spring-boot-starter-jooq"
+
 fun `netty-dns-macos`(
     version: String = Versions.NETTY_DNS_MACOS,
     classifier: String? = null
@@ -31,3 +43,10 @@ fun `apache-ant`(version: String = Versions.APACHE_ANT) =
 
 fun `java-native-access`(version: String = Versions.JAVA_NATIVE_ACCESS) =
     "net.java.dev.jna:jna:${version}"
+
+fun `jjwt-api`(version: String = Versions.JJWT) =
+    "io.jsonwebtoken:jjwt-api:${version}"
+fun `jjwt-impl`(version: String = Versions.JJWT) =
+    "io.jsonwebtoken:jjwt-impl:${version}"
+fun `jjwt-jackson`(version: String = Versions.JJWT) =
+    "io.jsonwebtoken:jjwt-jackson:${version}"
