@@ -10,7 +10,6 @@ data class JwtProperties (
     private val refreshTokenExpirationDays: Long,
     val zoneId: ZoneId
 ) {
-
     val accessTokenExpirationTimeInMillis: Long = accessTokenExpirationMinute * ONE_MINUTE * ONE_SECOND
     val refreshTokenExpirationTimeInMillis: Long = refreshTokenExpirationDays * ONE_DAY * ONE_HOUR * ONE_MINUTE * ONE_SECOND
 

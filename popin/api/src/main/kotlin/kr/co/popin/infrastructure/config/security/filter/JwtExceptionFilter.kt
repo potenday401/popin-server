@@ -15,7 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtExceptionFilter (
     private val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

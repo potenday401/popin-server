@@ -18,7 +18,6 @@ import kotlin.jvm.Throws
 class JwtTokenProvider (
     private val jwtProperties: JwtProperties
 ) {
-
     private val secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtProperties.secret))
 
     fun generateAccessToken(userDetails: UserDetails): String {

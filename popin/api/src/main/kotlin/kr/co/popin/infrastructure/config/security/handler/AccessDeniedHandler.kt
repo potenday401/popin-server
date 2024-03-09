@@ -16,7 +16,6 @@ import kotlin.jvm.Throws
 class AccessDeniedHandler (
     private val objectMapper: ObjectMapper
 ) : AccessDeniedHandler {
-
     @Throws(IOException::class, ServletException::class)
     override fun handle(
         request: HttpServletRequest,

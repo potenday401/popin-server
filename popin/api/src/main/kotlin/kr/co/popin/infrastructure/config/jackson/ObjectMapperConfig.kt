@@ -17,7 +17,6 @@ import java.util.*
 
 @Configuration
 class ObjectMapperConfig {
-
     @Bean
     fun objectMapper(): ObjectMapper {
         val dateTimeFormatter = ISO_LOCAL_DATE_TIME

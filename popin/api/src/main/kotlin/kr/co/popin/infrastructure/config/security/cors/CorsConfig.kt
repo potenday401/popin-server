@@ -12,7 +12,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class CorsConfig (
     private val originConstantsProvider: OriginConstantsProvider
 ) {
-
     @Bean
     fun corsConfiguration(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {

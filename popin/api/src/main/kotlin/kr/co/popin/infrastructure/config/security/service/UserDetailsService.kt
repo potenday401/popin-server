@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 class UserDetailsService (
     private val userRepository: IUserRepository
 ) : UserDetailsService {
-
     @Transactional(readOnly = true)
     override fun loadUserByUsername(username: String): UserDetails {
         val userEmail = UserEmail.newUserEmail(username)

@@ -25,7 +25,6 @@ class SecurityConfig (
     private val authenticationEntryPoint: AuthenticationEntryPoint,
     private val securityRequestMatchers: RequestMatchers
 ) {
-
     @Bean
     fun securityFilterChain(
         http: HttpSecurity

@@ -24,7 +24,6 @@ class JwtTokenFilter (
     private val userDetailsService: UserDetailsService,
     private val securityRequestMatchers: RequestMatchers
 ) : OncePerRequestFilter() {
-
     @Throws(IOException::class, ServletException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,

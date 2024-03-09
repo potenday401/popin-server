@@ -7,7 +7,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 @Configuration
 class JacksonConfig {
-
     @Bean
     fun mappingJackson2HttpMessageConverter(
         objectMapper: ObjectMapper
