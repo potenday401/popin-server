@@ -1,18 +1,23 @@
 package kr.co.popin.infrastructure.config.security.dto
 
-import kr.co.popin.domain.model.user.persistence.dto.UserDto
+import kr.co.popin.domain.model.user.vo.UserEmail
+import kr.co.popin.domain.model.user.vo.UserId
+import kr.co.popin.domain.model.user.vo.UserPassword
 import kr.co.popin.infrastructure.config.security.enums.Role
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserPrincipal (
-    private val id: String,
-    private val email: String,
-    private val password: String,
+    id: UserId,
+    email: UserEmail,
+    password: UserPassword,
     roles: Set<Role> = emptySet()
 ) : UserDetails {
 
+    private val id: String = id.id
+    private val email: String = email.email
+    private val password: String = password.password
     private val roles: Set<Role> = roles
         .ifEmpty {
             setOf(Role.USER)
@@ -50,14 +55,5 @@ class UserPrincipal (
 
     override fun isEnabled(): Boolean {
         return true
-    }
-
-    companion object {
-        fun newUserPrincipal(user: UserDto) =
-            UserPrincipal(
-                user.id,
-                user.email,
-                user.password
-            )
     }
 }

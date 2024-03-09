@@ -1,11 +1,10 @@
-package kr.co.popin.domain.model.user.persistence.dto
+package kr.co.popin.infrastructure.persistence.user.entity
 
 import java.time.LocalDateTime
 
-data class UserDto (
+data class UserEntity (
     val id: String,
     val email: String,
     val password: String,
-    val isVerificationRequired: Boolean,
     val registerAt: LocalDateTime
 )

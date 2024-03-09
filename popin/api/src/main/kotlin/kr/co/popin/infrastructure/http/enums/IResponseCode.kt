@@ -10,9 +10,8 @@ interface IResponseCode {
 
     @JsonValue
     fun getRealCode(): String {
-        val zerofillLength = 6 - this.code.toString().length
-        val zerofillPrefix = String.format("%0" + zerofillLength + "d", 0)
+        val zerofillCode = String.format("%06d", this.code)
 
-        return "${this.getCodePrefix()}_${zerofillPrefix}${this.code}"
+        return "${this.getCodePrefix()}${zerofillCode}"
     }
 }
