@@ -90,6 +90,7 @@ jooq {
                         isRecords = false
                         isImmutablePojos = false
                         isFluentSetters = false
+                        isDaos = true
                     }
 
                     target.apply {

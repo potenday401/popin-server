@@ -21,4 +21,6 @@ internal object Versions {
     const val APACHE_ANT = "1.10.14"
 
     const val JAVA_NATIVE_ACCESS = "5.14.0"
+
+    const val JJWT = "0.12.5"
 }

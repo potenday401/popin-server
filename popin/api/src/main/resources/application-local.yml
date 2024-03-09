@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: popin
+    password: 1234
+    hikari:
+      auto-commit: true
+      connection-timeout: 30000
+      max-lifetime: 30000
+      maximum-pool-size: 75
+  jooq:
+    sql-dialect: postgres
+  flyway:
+    enabled: true
+  sql:
+    init:
+      mode: never
