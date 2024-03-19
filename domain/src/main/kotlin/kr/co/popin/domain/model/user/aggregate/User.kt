@@ -8,25 +8,9 @@ import java.time.ZoneId
 data class User (
     val id: UserId,
     val email: UserEmail,
-    val password: UserPassword
+    val password: UserPassword,
+    val registerAt: LocalDateTime
 ) : Serializable {
-
-    var registerAt: LocalDateTime
-
-    constructor(
-        id: UserId,
-        email: UserEmail,
-        password: UserPassword,
-        registerAt: LocalDateTime
-    ) : this(id, email, password) {
-        this.registerAt = registerAt
-    }
-
-    init {
-        val gmtZoneId = ZoneId.of("GMT")
-
-        this.registerAt = LocalDateTime.now(gmtZoneId)
-    }
 
     companion object {
         private const val serialVersionUID = 1L
@@ -35,10 +19,13 @@ data class User (
             email: UserEmail,
             password: UserPassword
         ): User {
+            val gmtZoneId = ZoneId.of("GMT")
+
             return User(
                 UserId.newUserId(),
                 email,
-                password
+                password,
+                LocalDateTime.now(gmtZoneId)
             )
         }
     }

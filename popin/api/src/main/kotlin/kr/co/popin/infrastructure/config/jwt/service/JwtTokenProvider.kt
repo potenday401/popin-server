@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import kr.co.popin.domain.model.auth.aggregate.AuthToken
 import kr.co.popin.infrastructure.config.jwt.property.JwtProperties
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
@@ -26,7 +27,7 @@ class JwtTokenProvider (
         return createToken(
             claims,
             userDetails.username,
-            jwtProperties.accessTokenExpirationTimeInMillis
+            AuthToken.ACCESS_TOKEN_EXPIRATION_MILLIS
         )
     }
 
@@ -36,7 +37,7 @@ class JwtTokenProvider (
         return createToken(
             claims,
             userDetails.username,
-            jwtProperties.refreshTokenExpirationTimeInMillis
+            AuthToken.REFRESH_TOKEN_EXPIRATION_MILLIS
         )
     }
 
@@ -84,7 +85,7 @@ class JwtTokenProvider (
     }
 
     fun isTokenExpired(token: String): Boolean = try {
-        extractExpiration(token).isBefore(LocalDateTime.now())
+        extractExpiration(token).isBefore(LocalDateTime.now(jwtProperties.zoneId))
     } catch (e: ExpiredJwtException) {
         true
     }

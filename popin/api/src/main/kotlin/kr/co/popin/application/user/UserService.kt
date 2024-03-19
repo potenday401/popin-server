@@ -1,11 +1,15 @@
 package kr.co.popin.application.user
 
+import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.exceptions.UserExistsException
+import kr.co.popin.domain.model.auth.aggregate.AuthToken
+import kr.co.popin.domain.model.auth.dtos.AuthTokenInfo
+import kr.co.popin.domain.model.auth.enums.AuthTokenType
 import kr.co.popin.domain.model.user.aggregate.User
+import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.domain.model.user.vo.UserEmail
 import kr.co.popin.domain.model.user.vo.UserPassword
 import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
-import kr.co.popin.infrastructure.persistence.user.UserPersistenceAdapter
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserService (
     private val passwordEncoder: PasswordEncoder,
-    private val userPersistenceAdapter: UserPersistenceAdapter
+    private val authService: AuthService,
+    private val userPersistenceAdapter: IUserPersistencePort
 ) {
     @Transactional
     fun registerUser(email: String, password: String) {
@@ -30,6 +35,32 @@ class UserService (
         )
 
         userPersistenceAdapter.save(newUser)
+    }
+
+    @Transactional
+    fun login(email: String, password: String): AuthTokenInfo {
+        val userEmail = UserEmail(email)
+        val userPassword = UserPassword(password)
+
+        validateEmail(userEmail)
+        validatePassword(userPassword)
+
+        return authService.createNewAuthentication(
+            email = email,
+            password = password
+        )
+    }
+
+    @Transactional
+    fun logout(accessToken: String) {
+        val removedPrefixAccessToken = accessToken.removePrefix(AuthToken.ACCESS_TOKEN_PREFIX).trim()
+
+        authService.existCheckAuthToken(
+            aToken = removedPrefixAccessToken,
+            aTokenType = AuthTokenType.ACCESS
+        )
+
+        authService.expireAuthTokens()
     }
 
     @Transactional(readOnly = true)
