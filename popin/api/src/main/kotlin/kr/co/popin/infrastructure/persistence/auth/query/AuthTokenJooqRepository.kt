@@ -36,4 +36,13 @@ class AuthTokenJooqRepository (
             )
             .fetchOneInto(AuthTokenEntity::class.java)
     }
+
+    override fun deleteAllByUserId(userId: String) {
+        dslContext
+            .deleteFrom(jAuthToken)
+            .where(
+                jAuthToken.USER_ID.eq(userId)
+            )
+            .execute()
+    }
 }

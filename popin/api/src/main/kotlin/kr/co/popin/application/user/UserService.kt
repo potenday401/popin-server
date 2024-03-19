@@ -2,7 +2,9 @@ package kr.co.popin.application.user
 
 import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.exceptions.UserExistsException
+import kr.co.popin.domain.model.auth.aggregate.AuthToken
 import kr.co.popin.domain.model.auth.dtos.AuthTokenInfo
+import kr.co.popin.domain.model.auth.enums.AuthTokenType
 import kr.co.popin.domain.model.user.aggregate.User
 import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.domain.model.user.vo.UserEmail
@@ -47,6 +49,18 @@ class UserService (
             email = email,
             password = password
         )
+    }
+
+    @Transactional
+    fun logout(accessToken: String) {
+        val removedPrefixAccessToken = accessToken.removePrefix(AuthToken.ACCESS_TOKEN_PREFIX).trim()
+
+        authService.existCheckAuthToken(
+            aToken = removedPrefixAccessToken,
+            aTokenType = AuthTokenType.ACCESS
+        )
+
+        authService.expireAuthTokens()
     }
 
     @Transactional(readOnly = true)

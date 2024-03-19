@@ -29,6 +29,10 @@ class AuthTokenPersistenceAdapter (
         )
     }
 
+    override fun deleteAllByUserId(userId: UserId) {
+        authTokenRepository.deleteAllByUserId(userId.id)
+    }
+
     override fun findByUserIdAndTokenAndTokenType(userId: UserId, token: Token, tokenType: AuthTokenType): AuthToken? {
         val authTokenEntity = authTokenRepository.findByUserIdAndTokenAndTokenType(
             userId = userId.id,

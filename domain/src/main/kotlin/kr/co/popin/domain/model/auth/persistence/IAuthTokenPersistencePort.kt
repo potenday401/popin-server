@@ -8,5 +8,6 @@ import kr.co.popin.domain.model.user.vo.UserId
 interface IAuthTokenPersistencePort {
     fun save(authToken: AuthToken): AuthToken
     fun delete(authToken: AuthToken)
+    fun deleteAllByUserId(userId: UserId)
     fun findByUserIdAndTokenAndTokenType(userId: UserId, token: Token, tokenType: AuthTokenType): AuthToken?
 }

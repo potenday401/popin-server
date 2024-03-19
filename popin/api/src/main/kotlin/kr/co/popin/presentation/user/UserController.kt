@@ -6,10 +6,8 @@ import kr.co.popin.presentation.user.request.UserDuplicateCheckRequest
 import kr.co.popin.presentation.user.request.UserLoginRequest
 import kr.co.popin.presentation.user.request.UserSignUpRequest
 import kr.co.popin.presentation.user.response.UserLoginResponse
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpHeaders
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/users")
@@ -43,6 +41,15 @@ class UserController (
                 refreshToken = result.refreshToken
             )
         )
+    }
+
+    @PostMapping("/logout")
+    fun logoutUser(
+        @RequestHeader(HttpHeaders.AUTHORIZATION) accessToken: String
+    ): SuccessResponse {
+        userService.logout(accessToken)
+
+        return SuccessResponse()
     }
 
     @PostMapping("/duplicate-check")
