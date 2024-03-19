@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import kr.co.popin.infrastructure.config.jwt.property.JwtProperties.Companion.ACCESS_AUTH_PREFIX
+import kr.co.popin.domain.model.auth.aggregate.AuthToken
 import kr.co.popin.infrastructure.config.jwt.service.JwtTokenProvider
 import kr.co.popin.infrastructure.config.security.authorization.RequestMatchers
 import kr.co.popin.infrastructure.config.security.dto.UserPrincipal
@@ -31,10 +31,10 @@ class JwtTokenFilter (
         chain: FilterChain
     ) {
         val authorizationHeader = request.getHeader(AUTHORIZATION)
-        val hasAccessTokenHeader = authorizationHeader?.startsWith("$ACCESS_AUTH_PREFIX ") == true
+        val hasAccessTokenHeader = authorizationHeader?.startsWith("${AuthToken.ACCESS_TOKEN_PREFIX} ") == true
 
         val accessToken: String? = if (hasAccessTokenHeader) {
-            authorizationHeader.removePrefix(ACCESS_AUTH_PREFIX).trim()
+            authorizationHeader.removePrefix(AuthToken.ACCESS_TOKEN_PREFIX).trim()
         } else null
 
         if (accessToken != null) {
