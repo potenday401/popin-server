@@ -50,3 +50,6 @@ fun `jjwt-impl`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-impl:${version}"
 fun `jjwt-jackson`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-jackson:${version}"
+
+fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
+    "com.amazonaws:aws-java-sdk-ses:${version}"

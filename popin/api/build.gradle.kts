@@ -24,4 +24,6 @@ dependencies {
     implementation(`spring-boot-starter-jooq`)
 
     runtimeOnly(`postgres-connector`())
+
+    implementation(`aws-sdk-ses`())
 }
