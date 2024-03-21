@@ -12,7 +12,8 @@ jwt:
   zone-id: Europe/London
 aws:
   credentials:
-    smtp:
-      access-key: ${AWS_SMTP_ACCESS_KEY}
-      secret-key: ${AWS_SMTP_SECRET_KEY}
-      region: ${AWS_SMTP_REGION}
+    ses:
+      from-mail: ${AWS_SES_FROM_MAIL}
+      access-key: ${AWS_SES_ACCESS_KEY}
+      secret-key: ${AWS_SES_SECRET_KEY}
+      region: ${AWS_SES_REGION}

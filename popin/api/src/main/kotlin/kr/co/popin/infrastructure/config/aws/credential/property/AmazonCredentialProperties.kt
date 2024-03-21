@@ -5,10 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "aws.credentials")
 data class AmazonCredentialProperties (
-    val smtp: AmazonCredentialsSmtpProperties
+    val ses: AmazonCredentialsSesProperties
 )
 
-data class AmazonCredentialsSmtpProperties (
+data class AmazonCredentialsSesProperties (
+    val fromMail: String,
     val accessKey: String,
     val secretKey: String,
     val region: Regions

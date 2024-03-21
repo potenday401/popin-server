@@ -11,7 +11,7 @@ class AmazonCredentialConfig (
 ){
     @Bean
     fun simpleEmailServiceCredentials() = BasicAWSCredentials(
-        amazonCredentialProperties.smtp.accessKey,
-        amazonCredentialProperties.smtp.secretKey
+        amazonCredentialProperties.ses.accessKey,
+        amazonCredentialProperties.ses.secretKey
     )
 }

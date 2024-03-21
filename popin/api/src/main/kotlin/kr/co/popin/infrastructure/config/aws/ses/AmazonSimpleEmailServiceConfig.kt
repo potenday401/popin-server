@@ -17,7 +17,7 @@ class AmazonSimpleEmailServiceConfig (
         simpleEmailServiceCredentials: BasicAWSCredentials
     ): AmazonSimpleEmailService = AmazonSimpleEmailServiceClientBuilder
         .standard()
-        .withRegion(amazonCredentialProperties.smtp.region)
+        .withRegion(amazonCredentialProperties.ses.region)
         .withCredentials(AWSStaticCredentialsProvider(simpleEmailServiceCredentials))
         .build()
 }
