@@ -1,7 +1,11 @@
 package kr.co.popin.application.user
 
 import kr.co.popin.application.auth.AuthService
+import kr.co.popin.application.auth.dtos.EmailAuthCodeInfo
 import kr.co.popin.application.exceptions.UserExistsException
+import kr.co.popin.application.external.aws.MailSender
+import kr.co.popin.application.external.aws.dtos.Mail
+import kr.co.popin.application.external.aws.enums.MailType
 import kr.co.popin.domain.model.auth.aggregate.AuthToken
 import kr.co.popin.domain.model.auth.dtos.AuthTokenInfo
 import kr.co.popin.domain.model.auth.enums.AuthTokenType
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserService (
     private val passwordEncoder: PasswordEncoder,
     private val authService: AuthService,
+    private val mailSender: MailSender,
     private val userPersistenceAdapter: IUserPersistencePort
 ) {
     @Transactional
@@ -69,6 +74,27 @@ class UserService (
 
         validateEmail(userEmail)
         userExistsCheck(userEmail)
+    }
+
+    @Transactional
+    fun sendConfirmCodeMail(email: String): EmailAuthCodeInfo {
+        val userEmail = UserEmail(email)
+
+        validateEmail(userEmail)
+
+        val emailAuthCodeInfo = authService.createEmailAuthCode(email)
+
+        if (emailAuthCodeInfo.authCode != null) {
+            mailSender.send(
+                to = email,
+                mail = Mail(
+                    mailType = MailType.MAIL_CONFIRM,
+                    variables = mapOf("confirmCode" to emailAuthCodeInfo.authCode)
+                )
+            )
+        }
+
+        return emailAuthCodeInfo
     }
 
     private fun hashPassword(userPassword: UserPassword): UserPassword {

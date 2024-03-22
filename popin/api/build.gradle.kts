@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(`spring-boot-starter-web`)
+    implementation(`spring-boot-starter-thymeleaf`)
     implementation(`spring-boot-configuration-processor`)
 
     implementation(`spring-boot-starter-security`)

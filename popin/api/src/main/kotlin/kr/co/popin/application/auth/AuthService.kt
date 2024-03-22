@@ -1,25 +1,32 @@
 package kr.co.popin.application.auth
 
+import kr.co.popin.application.auth.dtos.EmailAuthCodeInfo
 import kr.co.popin.application.exceptions.NotFoundAuthTokenException
 import kr.co.popin.domain.model.auth.aggregate.AuthToken
+import kr.co.popin.domain.model.auth.aggregate.EmailAuthCode
 import kr.co.popin.domain.model.auth.dtos.AuthTokenInfo
 import kr.co.popin.domain.model.auth.enums.AuthTokenType
 import kr.co.popin.domain.model.auth.persistence.IAuthTokenPersistencePort
 import kr.co.popin.domain.model.auth.vo.Token
+import kr.co.popin.domain.model.user.vo.UserEmail
 import kr.co.popin.domain.model.user.vo.UserId
 import kr.co.popin.infrastructure.config.jwt.service.JwtTokenProvider
 import kr.co.popin.infrastructure.config.security.dto.UserPrincipal
+import kr.co.popin.infrastructure.persistence.auth.EmailAuthPersistenceAdapter
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Service
 class AuthService (
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
-    private val authPersistenceAdapter: IAuthTokenPersistencePort
+    private val authPersistenceAdapter: IAuthTokenPersistencePort,
+    private val emailAuthPersistenceAdapter: EmailAuthPersistenceAdapter
 ) {
     @Transactional
     fun createNewAuthentication(email: String, password: String): AuthTokenInfo {
@@ -69,6 +76,34 @@ class AuthService (
         val userId = UserId(userPrincipal.getUserId())
 
         authPersistenceAdapter.deleteAllByUserId(userId)
+    }
+
+    @Transactional
+    fun createEmailAuthCode(email: String): EmailAuthCodeInfo {
+        val gmtZoneId = ZoneId.of("GMT")
+        val currentDate = LocalDate.now(gmtZoneId)
+
+        val userEmail = UserEmail(email)
+        val emailAuthCodes = emailAuthPersistenceAdapter.findAllByUserEmailAndCreateAt(
+            userEmail = userEmail,
+            date = currentDate
+        )
+        val toDaySendCount = emailAuthCodes.count()
+
+        if (toDaySendCount >= EmailAuthCode.EMAIL_DAY_SEND_LIMIT) {
+            return EmailAuthCodeInfo(
+                toDaySendCount = toDaySendCount
+            )
+        }
+
+        val savedEmailAuthCode = emailAuthPersistenceAdapter.save(
+            EmailAuthCode.newEmailAuthCode(userEmail)
+        )
+
+        return EmailAuthCodeInfo(
+            authCode = savedEmailAuthCode.code.code,
+            toDaySendCount = toDaySendCount + 1
+        )
     }
 
     private fun createUserPrincipal(email: String, password: String): UserPrincipal {

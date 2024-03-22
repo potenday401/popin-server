@@ -8,6 +8,9 @@ val `kotlin-stdlib`
 val `spring-boot-starter-web`
     get() = "org.springframework.boot:spring-boot-starter-web"
 
+val `spring-boot-starter-thymeleaf`
+    get() = "org.springframework.boot:spring-boot-starter-thymeleaf"
+
 val `jackson-module-kotlin`
     get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
