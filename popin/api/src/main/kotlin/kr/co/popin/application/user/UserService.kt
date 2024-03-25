@@ -2,6 +2,7 @@ package kr.co.popin.application.user
 
 import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.auth.dtos.EmailAuthCodeInfo
+import kr.co.popin.application.exceptions.NotFoundConfirmCodeException
 import kr.co.popin.application.exceptions.UserExistsException
 import kr.co.popin.application.external.aws.MailSender
 import kr.co.popin.application.external.aws.dtos.Mail
@@ -95,6 +96,20 @@ class UserService (
         }
 
         return emailAuthCodeInfo
+    }
+
+    @Transactional
+    fun verifyConfirmCode(email: String, authCode: String): EmailAuthCodeInfo {
+        val userEmail = UserEmail(email)
+
+        validateEmail(userEmail)
+
+        val lastNotExpiredAuthCode = authService.getEmailAuthCode(
+            aEmail = email,
+            aAuthCode = authCode
+        ) ?: throw NotFoundConfirmCodeException()
+
+        return authService.expireEmailAuthCode(lastNotExpiredAuthCode)
     }
 
     private fun hashPassword(userPassword: UserPassword): UserPassword {

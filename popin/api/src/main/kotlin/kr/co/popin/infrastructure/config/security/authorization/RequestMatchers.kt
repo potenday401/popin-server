@@ -12,6 +12,7 @@ class RequestMatchers {
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/duplicate-check"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/sign-up"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/login"),
-        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/send/email/confirm-code")
+        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/send/email/confirm-code"),
+        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/verify/email/confirm-code")
     )
 }
