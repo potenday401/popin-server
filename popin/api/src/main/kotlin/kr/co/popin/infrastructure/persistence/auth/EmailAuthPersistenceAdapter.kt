@@ -28,6 +28,12 @@ class EmailAuthPersistenceAdapter (
         emailAuthCodeRepository.update(emailAuthCodeEntity)
     }
 
+    override fun updateAll(emailAuthCodes: List<EmailAuthCode>) {
+        val emailAuthCodeEntities = emailAuthCodes
+            .map(EmailAuthCodeMapper::mapToPersistenceEntity)
+        emailAuthCodeRepository.update(emailAuthCodeEntities)
+    }
+
     override fun findAllByUserEmailAndCode(userEmail: UserEmail, code: AuthCode): List<EmailAuthCode> {
         val authTokenEntities = emailAuthCodeRepository.findAllByUserEmailAndCode(
             userEmail = userEmail.email,

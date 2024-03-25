@@ -8,6 +8,7 @@ import java.time.LocalDate
 interface IEmailAuthCodePersistencePort {
     fun save(emailAuthCode: EmailAuthCode): EmailAuthCode
     fun update(emailAuthCode: EmailAuthCode)
+    fun updateAll(emailAuthCodes: List<EmailAuthCode>)
     fun findAllByUserEmailAndCode(userEmail: UserEmail, code: AuthCode): List<EmailAuthCode>
     fun findAllByUserEmailAndCreateAt(userEmail: UserEmail, date: LocalDate): List<EmailAuthCode>
 }

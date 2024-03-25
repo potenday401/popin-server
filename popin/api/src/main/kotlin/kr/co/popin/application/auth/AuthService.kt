@@ -92,6 +92,8 @@ class AuthService (
         )
         val toDaySendCount = emailAuthCodes.count()
 
+        this.expireEmailAuthCodes(emailAuthCodes)
+
         if (toDaySendCount >= EmailAuthCode.EMAIL_DAY_SEND_LIMIT) {
             return EmailAuthCodeInfo(
                 toDaySendCount = toDaySendCount
@@ -147,6 +149,23 @@ class AuthService (
         return EmailAuthCodeInfo(
             toDaySendCount = emailAuthCodes.count()
         )
+    }
+
+    private fun expireEmailAuthCodes(emailAuthCodes: List<EmailAuthCode>) {
+        val gmtZoneId = ZoneId.of("GMT")
+        val now = LocalDateTime.now(gmtZoneId)
+
+        val expiredEmailAuthCodes = emailAuthCodes.map { emailAuthCode ->
+            EmailAuthCode(
+                id = emailAuthCode.id,
+                userEmail = emailAuthCode.userEmail,
+                code = emailAuthCode.code,
+                expirationTime = now,
+                createAt = emailAuthCode.createAt
+            )
+        }
+
+        emailAuthPersistenceAdapter.updateAll(expiredEmailAuthCodes)
     }
 
     private fun createUserPrincipal(email: String, password: String): UserPrincipal {
