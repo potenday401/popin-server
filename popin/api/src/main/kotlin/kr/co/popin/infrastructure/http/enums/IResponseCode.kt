@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue
 interface IResponseCode {
     val code: Int
     val httpStatus: Int
+    val description: String
 
     fun getCodePrefix(): String
 

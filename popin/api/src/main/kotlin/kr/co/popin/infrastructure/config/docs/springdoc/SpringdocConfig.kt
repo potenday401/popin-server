@@ -5,10 +5,12 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
+import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.core.env.Environment
+
 
 @Profile("!prod")
 @Configuration
@@ -26,6 +28,19 @@ class SpringdocConfig (
                 .addList("Authorization")
         )
         .info(apiInfo())
+
+    @Bean
+    fun configureGroupedOpenApi(
+        groupedOpenApi: Map<String, GroupedOpenApi>,
+        operationCustomizerWithEnums: OperationCustomizerWithEnums
+    ): Map<String, GroupedOpenApi> {
+        groupedOpenApi.forEach { (_: String, groupedOpenApi: GroupedOpenApi) ->
+            groupedOpenApi.operationCustomizers
+                .add(operationCustomizerWithEnums)
+        }
+
+        return groupedOpenApi
+    }
 
     @Bean
     fun authorization(): SecurityScheme =
