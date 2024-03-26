@@ -1,5 +1,8 @@
 package kr.co.popin.presentation.user
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.user.UserService
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.user.request.*
@@ -9,11 +12,13 @@ import kr.co.popin.presentation.user.response.VerifyConfirmCodeResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("/users")
 class UserController (
     private val userService: UserService
 ) {
+    @Operation(summary = "회원 가입")
     @PostMapping("/sign-up")
     fun signUpUser(
         @RequestBody request: UserSignUpRequest
@@ -26,6 +31,7 @@ class UserController (
         return SuccessResponse()
     }
 
+    @Operation(summary = "로그인")
     @PostMapping("/login")
     fun loginUser(
         @RequestBody request: UserLoginRequest
@@ -43,15 +49,29 @@ class UserController (
         )
     }
 
+    @Operation(
+        summary = "로그아웃",
+        description = """
+            - 활성화된 모든 토큰을 만료 시킵니다.
+        """
+    )
     @PostMapping("/logout")
     fun logoutUser(
-        @RequestHeader(HttpHeaders.AUTHORIZATION) accessToken: String
+        @Parameter(hidden = true)
+        @RequestHeader(HttpHeaders.AUTHORIZATION)
+        accessToken: String
     ): SuccessResponse {
         userService.logout(accessToken)
 
         return SuccessResponse()
     }
 
+    @Operation(
+        summary = "유저 중복 체크",
+        description = """
+            - 해당 이메일로 가입한 유저가 존재하는지 확인함
+        """
+    )
     @PostMapping("/duplicate-check")
     fun userDuplicateCheck(
         @RequestBody request: UserDuplicateCheckRequest
@@ -61,6 +81,14 @@ class UserController (
         return SuccessResponse()
     }
 
+    @Operation(
+        summary = "이메일에 인증 코드 발송",
+        description = """
+            - 같은 이메일로 하루 5회만 요청 가능
+            - 재 요청 시 이미 존재하는 인증 코드는 모두 만료 처리함
+            - 유효 기간 10분
+        """
+    )
     @PostMapping("/send/email/confirm-code")
     fun sendConfirmCode(
         @RequestBody request: SendConfirmCodeRequest
@@ -75,6 +103,12 @@ class UserController (
         )
     }
 
+    @Operation(
+        summary = "이메일로 받은 인증 코드 검증",
+        description = """
+            - 한 번 인증 요청 하면 해당 인증 코드는 만료됨
+        """
+    )
     @PostMapping("/verify/email/confirm-code")
     fun verifyConfirmCode(
         @RequestBody request: VerifyConfirmCodeRequest

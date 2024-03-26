@@ -20,3 +20,18 @@ spring:
       mode: never
   thymeleaf:
     cache: false
+springdoc:
+  api-docs:
+    enabled: true
+    path: /docs/swagger/json
+  swagger-ui:
+    enabled: true
+    disable-swagger-default-url: true
+    path: /docs/swagger/ui
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  paths-to-match: /**
+  paths-to-exclude: /error/**
