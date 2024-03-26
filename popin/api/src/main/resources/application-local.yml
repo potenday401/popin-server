@@ -18,3 +18,5 @@ spring:
   sql:
     init:
       mode: never
+  thymeleaf:
+    cache: false

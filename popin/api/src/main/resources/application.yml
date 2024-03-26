@@ -10,3 +10,10 @@ server:
 jwt:
   secret: cf329ca2f4e0f7bd8e38dfe406a7463571512e9a4ea0d5544efa02293f0516b886f0ad674b3025f478d7ac397e6c2544e9809b5fb19a1b8c7ca191f8d70744b9
   zone-id: Europe/London
+aws:
+  credentials:
+    ses:
+      from-mail: ${AWS_SES_FROM_MAIL}
+      access-key: ${AWS_SES_ACCESS_KEY}
+      secret-key: ${AWS_SES_SECRET_KEY}
+      region: ${AWS_SES_REGION}

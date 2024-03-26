@@ -8,6 +8,9 @@ val `kotlin-stdlib`
 val `spring-boot-starter-web`
     get() = "org.springframework.boot:spring-boot-starter-web"
 
+val `spring-boot-starter-thymeleaf`
+    get() = "org.springframework.boot:spring-boot-starter-thymeleaf"
+
 val `jackson-module-kotlin`
     get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
@@ -50,3 +53,6 @@ fun `jjwt-impl`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-impl:${version}"
 fun `jjwt-jackson`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-jackson:${version}"
+
+fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
+    "com.amazonaws:aws-java-sdk-ses:${version}"

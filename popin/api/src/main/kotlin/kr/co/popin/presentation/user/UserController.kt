@@ -2,10 +2,10 @@ package kr.co.popin.presentation.user
 
 import kr.co.popin.application.user.UserService
 import kr.co.popin.infrastructure.http.response.SuccessResponse
-import kr.co.popin.presentation.user.request.UserDuplicateCheckRequest
-import kr.co.popin.presentation.user.request.UserLoginRequest
-import kr.co.popin.presentation.user.request.UserSignUpRequest
+import kr.co.popin.presentation.user.request.*
+import kr.co.popin.presentation.user.response.SentEmailConfirmCodeResponse
 import kr.co.popin.presentation.user.response.UserLoginResponse
+import kr.co.popin.presentation.user.response.VerifyConfirmCodeResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.*
 
@@ -60,4 +60,36 @@ class UserController (
 
         return SuccessResponse()
     }
+
+    @PostMapping("/send/email/confirm-code")
+    fun sendConfirmCode(
+        @RequestBody request: SendConfirmCodeRequest
+    ): SuccessResponse {
+        val result = userService.sendConfirmCodeMail(request.email)
+
+        return SuccessResponse(
+            responseData = SentEmailConfirmCodeResponse(
+                limit = result.limit,
+                toDaySendCount = result.toDaySendCount
+            )
+        )
+    }
+
+    @PostMapping("/verify/email/confirm-code")
+    fun verifyConfirmCode(
+        @RequestBody request: VerifyConfirmCodeRequest
+    ): SuccessResponse {
+        val result = userService.verifyConfirmCode(
+            email = request.email,
+            authCode = request.confirmCode
+        )
+
+        return SuccessResponse(
+            responseData = VerifyConfirmCodeResponse(
+                limit = result.limit,
+                toDaySendCount = result.toDaySendCount
+            )
+        )
+    }
+
 }

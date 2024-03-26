@@ -11,7 +11,8 @@ enum class ErrorResponseCode (
     UNKNOWN(3, HttpStatus.INTERNAL_SERVER_ERROR.value()),
     INVALID_EMAIL(4, HttpStatus.BAD_REQUEST.value()),
     INVALID_PASSWORD(5, HttpStatus.BAD_REQUEST.value()),
-    DUPLICATE_USER(6, HttpStatus.BAD_REQUEST.value())
+    DUPLICATE_USER(6, HttpStatus.BAD_REQUEST.value()),
+    BAD_REQUEST(7, HttpStatus.BAD_REQUEST.value())
     ;
 
     override fun getCodePrefix(): String {
