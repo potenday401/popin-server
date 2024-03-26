@@ -3,7 +3,7 @@ package kr.co.popin.presentation.user
 import kr.co.popin.application.user.UserService
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.user.request.*
-import kr.co.popin.presentation.user.response.SendedEmailConfirmCodeResponse
+import kr.co.popin.presentation.user.response.SentEmailConfirmCodeResponse
 import kr.co.popin.presentation.user.response.UserLoginResponse
 import kr.co.popin.presentation.user.response.VerifyConfirmCodeResponse
 import org.springframework.http.HttpHeaders
@@ -68,8 +68,7 @@ class UserController (
         val result = userService.sendConfirmCodeMail(request.email)
 
         return SuccessResponse(
-            responseData = SendedEmailConfirmCodeResponse(
-                confirmCode = result.authCode,
+            responseData = SentEmailConfirmCodeResponse(
                 limit = result.limit,
                 toDaySendCount = result.toDaySendCount
             )
