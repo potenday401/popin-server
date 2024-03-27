@@ -4,6 +4,11 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.user.UserService
+import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
+import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
+import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiSuccessResponseCode
+import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
+import kr.co.popin.infrastructure.http.enums.SuccessResponseCode
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.user.request.*
 import kr.co.popin.presentation.user.response.SentEmailConfirmCodeResponse
@@ -18,6 +23,16 @@ import org.springframework.web.bind.annotation.*
 class UserController (
     private val userService: UserService
 ) {
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_USER)
+        ]
+    )
     @Operation(summary = "회원 가입")
     @PostMapping("/sign-up")
     fun signUpUser(
@@ -31,6 +46,15 @@ class UserController (
         return SuccessResponse()
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
+        ]
+    )
     @Operation(summary = "로그인")
     @PostMapping("/login")
     fun loginUser(
@@ -49,6 +73,14 @@ class UserController (
         )
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED)
+        ]
+    )
     @Operation(
         summary = "로그아웃",
         description = """
@@ -66,6 +98,15 @@ class UserController (
         return SuccessResponse()
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_USER)
+        ]
+    )
     @Operation(
         summary = "유저 중복 체크",
         description = """
@@ -81,6 +122,15 @@ class UserController (
         return SuccessResponse()
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_USER)
+        ]
+    )
     @Operation(
         summary = "이메일에 인증 코드 발송",
         description = """
@@ -103,6 +153,15 @@ class UserController (
         )
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
+        ]
+    )
     @Operation(
         summary = "이메일로 받은 인증 코드 검증",
         description = """
