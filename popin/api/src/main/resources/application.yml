@@ -17,3 +17,6 @@ aws:
       access-key: ${AWS_SES_ACCESS_KEY}
       secret-key: ${AWS_SES_SECRET_KEY}
       region: ${AWS_SES_REGION}
+logging:
+  level:
+    root: INFO
