@@ -59,3 +59,6 @@ fun `jjwt-jackson`(version: String = Versions.JJWT) =
 
 fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
     "com.amazonaws:aws-java-sdk-ses:${version}"
+
+fun `aws-secret-manager-jdbc`(version: String = Versions.AWS_SECRET_MAMAGER_JDBC) =
+    "com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:${version}"
