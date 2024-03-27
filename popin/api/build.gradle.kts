@@ -14,6 +14,8 @@ dependencies {
     implementation(`spring-boot-starter-thymeleaf`)
     implementation(`spring-boot-configuration-processor`)
 
+    implementation(`spring-boot-starter-springdoc-webmvc-ui`())
+
     implementation(`spring-boot-starter-security`)
 
     implementation(`jackson-module-kotlin`)

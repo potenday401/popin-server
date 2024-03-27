@@ -11,6 +11,9 @@ val `spring-boot-starter-web`
 val `spring-boot-starter-thymeleaf`
     get() = "org.springframework.boot:spring-boot-starter-thymeleaf"
 
+fun `spring-boot-starter-springdoc-webmvc-ui`(version: String = Versions.SPRINGDOC) =
+    "org.springdoc:springdoc-openapi-starter-webmvc-ui:${version}"
+
 val `jackson-module-kotlin`
     get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
