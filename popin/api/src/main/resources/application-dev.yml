@@ -1,0 +1,36 @@
+server:
+  port: 5000
+spring:
+  datasource:
+    url: jdbc-secretsmanager:postgresql://popin-dev.cp66cu6mau3t.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver
+    username: rds!db-803dfad1-eaea-4a4d-bc3c-c1ae6a23ebf3
+    hikari:
+      auto-commit: true
+      connection-timeout: 30000
+      max-lifetime: 30000
+      maximum-pool-size: 75
+  jooq:
+    sql-dialect: postgres
+  flyway:
+    enabled: true
+  sql:
+    init:
+      mode: never
+  thymeleaf:
+    cache: false
+springdoc:
+  api-docs:
+    enabled: true
+    path: /docs/swagger/json
+  swagger-ui:
+    enabled: true
+    disable-swagger-default-url: true
+    path: /docs/swagger/ui
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  paths-to-match: /**
+  paths-to-exclude: /error/**

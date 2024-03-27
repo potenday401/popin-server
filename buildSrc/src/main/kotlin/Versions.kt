@@ -27,4 +27,5 @@ internal object Versions {
     const val JJWT = "0.12.5"
 
     const val AWS_SDK = "1.12.682"
+    const val AWS_SECRET_MAMAGER_JDBC = "2.0.2"
 }
