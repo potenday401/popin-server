@@ -1,6 +1,5 @@
 package kr.co.popin.infrastructure.persistence.content.entity
 
-import kr.co.popin.domain.model.content.Content
 import org.locationtech.jts.geom.Point
 import java.time.LocalDateTime
 
@@ -13,13 +12,10 @@ class ContentEntity private constructor(
 ) {
 
     companion object {
-        fun create(content: Content): ContentEntity {
-            return ContentEntity(content.id, content.title, content.address, content.point, content.createdDateTime)
+        fun create(title: String, address: String, point: Point, createdDateTime: LocalDateTime): ContentEntity {
+            return ContentEntity(null, title, address, point, createdDateTime)
         }
     }
 
-    fun toDomain(): Content {
-        return Content(this.id, this.title, this.address, this.point, this.createdDateTime)
-    }
 
 }
