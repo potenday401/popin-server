@@ -17,10 +17,11 @@ class ContentPersistenceAdapter(
     }
 
     private fun toDomain(entity: ContentEntity): Content {
-        return Content.create(entity.title,
-                              entity.address,
-                              entity.point,
-                              entity.createdDateTime)
+        return Content(entity.id,
+                       entity.title,
+                       entity.address,
+                       entity.point,
+                       entity.createdDateTime)
     }
 
     private fun toPersistenceEntity(domain: Content): ContentEntity {
