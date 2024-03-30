@@ -14,7 +14,7 @@ plugins {
 
 dependencies {
     implementation(`uuid-generator`())
-    implementation("org.locationtech.jts:jts-core:1.19.0")
+    implementation(`locationtech-jts-core`())
     jooqGenerator(`postgres-connector`())
 }
 
