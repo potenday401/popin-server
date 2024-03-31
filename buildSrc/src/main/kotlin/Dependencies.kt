@@ -62,3 +62,5 @@ fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
 
 fun `aws-secret-manager-jdbc`(version: String = Versions.AWS_SECRET_MAMAGER_JDBC) =
     "com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:${version}"
+
+fun `locationtech-jts-core`(version: String = Versions.JTS_CORE) = "org.locationtech.jts:jts-core:${version}"

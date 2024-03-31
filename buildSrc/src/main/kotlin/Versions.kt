@@ -28,4 +28,6 @@ internal object Versions {
 
     const val AWS_SDK = "1.12.682"
     const val AWS_SECRET_MAMAGER_JDBC = "2.0.2"
+
+    const val JTS_CORE = "1.19.0"
 }

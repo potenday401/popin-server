@@ -24,6 +24,7 @@ dependencies {
     runtimeOnly(`jjwt-impl`())
     runtimeOnly(`jjwt-jackson`())
 
+    implementation(`locationtech-jts-core`())
     implementation(`spring-boot-starter-jooq`)
 
     runtimeOnly(`postgres-connector`())
