@@ -11,7 +11,10 @@ class ContentPersistenceAdapter(
 ) {
 
     fun save(content: Content): Content {
-        val contentEntity = this.toPersistenceEntity(content)
+        val contentEntity = ContentEntity.create(content.title,
+                                                 content.address,
+                                                 content.point,
+                                                 content.createdDateTime)
         contentRepository.insert(contentEntity)
         return this.toDomain(contentEntity)
     }
@@ -25,10 +28,11 @@ class ContentPersistenceAdapter(
     }
 
     private fun toPersistenceEntity(domain: Content): ContentEntity {
-        return ContentEntity.create(domain.title,
-                                    domain.address,
-                                    domain.point,
-                                    domain.createdDateTime)
+        return ContentEntity(domain.id,
+                             domain.title,
+                             domain.address,
+                             domain.point,
+                             domain.createdDateTime)
     }
 
 }
