@@ -3,7 +3,9 @@ package kr.co.popin.presentation.user
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.user.UserService
+import kr.co.popin.domain.model.auth.aggregate.AuthToken.Companion.REFRESH_TOKEN_COOKIE_KEY
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiSuccessResponseCode
@@ -21,7 +23,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/users")
 class UserController (
-    private val userService: UserService
+    private val userService: UserService,
+    private val authService: AuthService
 ) {
     @ApiResponseCodes(
         success = [
@@ -85,6 +88,9 @@ class UserController (
         summary = "로그아웃",
         description = """
             - 활성화된 모든 토큰을 만료 시킵니다.
+
+            [Header]
+            - "Authorization": "Bearer {Access-Token}"
         """
     )
     @PostMapping("/logout")
@@ -96,6 +102,47 @@ class UserController (
         userService.logout(accessToken)
 
         return SuccessResponse()
+    }
+
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED)
+        ]
+    )
+    @Operation(
+        summary = "인증 토큰 재발급",
+        description = """
+            - Refresh 토큰을 이용해 새로운 Access, Refresh 토큰을 발급 받습니다.
+
+            [Cookie]
+            - "X-REFRESH-TOKEN": "{Refresh-Token}"
+            [Header]
+            - "Authorization": "Bearer {Access-Token}"
+        """
+    )
+    @PostMapping("/refresh")
+    fun refreshUserToken(
+        @Parameter(hidden = true)
+        @RequestHeader(HttpHeaders.AUTHORIZATION)
+        accessToken: String,
+        @Parameter(hidden = true)
+        @CookieValue(REFRESH_TOKEN_COOKIE_KEY)
+        refreshToken: String
+    ): SuccessResponse {
+        val result = authService.refresh(
+            accessToken = accessToken,
+            refreshToken = refreshToken
+        )
+
+        return SuccessResponse(
+            responseData = UserLoginResponse(
+                accessToken = result.accessToken,
+                refreshToken = result.refreshToken
+            )
+        )
     }
 
     @ApiResponseCodes(

@@ -21,6 +21,7 @@ data class AuthToken (
         private const val serialVersionUID = 1L
 
         const val ACCESS_TOKEN_PREFIX = "Bearer"
+        const val REFRESH_TOKEN_COOKIE_KEY = "X-REFRESH-TOKEN"
 
         private const val ONE_DAY: Long = 24
         private const val ONE_HOUR: Long = 60
