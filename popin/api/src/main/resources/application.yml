@@ -18,6 +18,8 @@ aws:
       access-key: ${AWS_SES_ACCESS_KEY}
       secret-key: ${AWS_SES_SECRET_KEY}
       region: ${AWS_SES_REGION}
+  s3:
+    bucket-name: ${AWS_S3_BUCKET}
 logging:
   level:
     root: INFO

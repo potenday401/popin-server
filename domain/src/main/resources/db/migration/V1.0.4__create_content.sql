@@ -5,3 +5,5 @@ CREATE TABLE "popin"."content" (
     point POINT NOT NULL,
     created_date_time TIMESTAMPTZ NOT NULL
 );
+
+CREATE INDEX "content_point_idx" ON "popin"."content" USING gist(point);

@@ -3,18 +3,18 @@ package kr.co.popin.infrastructure.persistence.content
 import kr.co.popin.domain.model.content.Content
 import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.content.query.ContentJooqRepository
+import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 
 @Component
 class ContentPersistenceAdapter(
-        private val contentRepository: ContentJooqRepository,
+    private val contentRepository: ContentJooqRepository,
 ) {
 
-    fun save(content: Content): Content {
-        val contentEntity = ContentEntity.create(content.title,
-                                                 content.address,
-                                                 content.point,
-                                                 content.createdDateTime)
+    fun save(title: String, address: String, point: Point): Content {
+        val id = contentRepository.generateId()
+        val contentEntity = ContentEntity(id, title, address, point, LocalDateTime.now())
         contentRepository.insert(contentEntity)
         return this.toDomain(contentEntity)
     }

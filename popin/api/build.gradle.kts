@@ -30,5 +30,8 @@ dependencies {
     runtimeOnly(`postgres-connector`())
 
     implementation(`aws-sdk-ses`())
+    implementation(`aws-sdk-s3`())
+    implementation(`aws-sdk-s3-transfer-manager`())
+    implementation(`aws-crt`())
     implementation(`aws-secret-manager-jdbc`())
 }
