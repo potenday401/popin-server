@@ -14,7 +14,7 @@ class ContentService(
 ) {
 
     fun post(contentCommand: PostContentCommand): Content {
-        val coordinate = Coordinate(contentCommand.latitude, contentCommand.latitude)
+        val coordinate = Coordinate(contentCommand.longitude, contentCommand.latitude)
         val point = geometryFactory.createPoint(coordinate)
         return contentPersistenceAdapter.save(contentCommand.title, contentCommand.address, point)
     }

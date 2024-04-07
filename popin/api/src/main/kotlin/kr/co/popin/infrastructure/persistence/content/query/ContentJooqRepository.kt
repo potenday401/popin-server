@@ -6,7 +6,9 @@ import kr.co.popin.tables.references.CONTENT
 import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.impl.DAOImpl
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
+import java.time.ZoneOffset
 
 @Repository
 class ContentJooqRepository(
@@ -19,13 +21,22 @@ class ContentJooqRepository(
     }
 
     fun generateId(): Long {
-        return dslContext.select()
+        return dslContext.select(CONTENT.ID)
             .from(CONTENT)
             .orderBy(CONTENT.ID.desc())
-            .fetchOneInto(ContentEntity::class.java)
-            ?.let { it.id + 1 }
+            .fetchOneInto(Long::class.java)
+            ?.let { it + 1 }
             ?: 1
     }
 
-
+    override fun insert(entity: ContentEntity) {
+        dslContext.insertInto(CONTENT)
+            .columns(CONTENT.ID, CONTENT.TITLE, CONTENT.ADDRESS, DSL.field("point"), CONTENT.CREATED_DATE_TIME)
+            .values(entity.id,
+                    entity.title,
+                    entity.address,
+                    DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)"),
+                    entity.createdDateTime.atOffset(ZoneOffset.UTC))
+            .execute()
+    }
 }

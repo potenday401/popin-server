@@ -1,9 +1,7 @@
 package kr.co.popin.infrastructure.persistence.photo.query
 
-import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.photo.entity.PhotoEntity
 import kr.co.popin.tables.records.JPhotoRecord
-import kr.co.popin.tables.references.CONTENT
 import kr.co.popin.tables.references.PHOTO
 import org.jooq.Configuration
 import org.jooq.DSLContext
@@ -21,11 +19,11 @@ class PhotoJooqRepository(
     }
 
     fun generateId(): Long {
-        return dslContext.select()
-            .from(CONTENT)
-            .orderBy(CONTENT.ID.desc())
-            .fetchOneInto(ContentEntity::class.java)
-            ?.let { it.id + 1 }
+        return dslContext.select(PHOTO.ID)
+            .from(PHOTO)
+            .orderBy(PHOTO.ID.desc())
+            .fetchOneInto(Long::class.java)
+            ?.let { it + 1 }
             ?: 1
     }
 

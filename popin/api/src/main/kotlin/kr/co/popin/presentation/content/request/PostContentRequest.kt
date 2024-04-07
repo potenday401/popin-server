@@ -1,6 +1,6 @@
-package kr.co.popin.application.content.dtos
+package kr.co.popin.presentation.content.request
 
-data class PostContentCommand(
+data class PostContentRequest(
     val title: String,
     val address: String,
     val latitude: Double,

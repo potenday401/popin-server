@@ -3,8 +3,9 @@ import nu.studer.gradle.jooq.JooqGenerate
 import org.jooq.codegen.KotlinGenerator
 import org.jooq.codegen.example.JPrefixGeneratorStrategy
 import org.jooq.meta.postgres.PostgresDatabase
-import org.postgresql.Driver as PostgresDriver
 import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.utility.DockerImageName
+import org.postgresql.Driver as PostgresDriver
 
 plugins {
     `jooq-gradle-plugin`()
@@ -33,11 +34,13 @@ buildscript {
 }
 
 class PostgresTestContainer(
-    dockerImageName: String
+    dockerImageName: DockerImageName
 ) : PostgreSQLContainer<PostgresTestContainer>(dockerImageName)
 
 val postgresContainer = tasks.register("postgresContainer") {
-    val postgres = PostgresTestContainer("postgres:16.2")
+    val dockerImage = DockerImageName.parse("postgis/postgis:16beta2-master")
+        .asCompatibleSubstituteFor("postgres")
+    val postgres = PostgresTestContainer(dockerImage)
         .withDatabaseName("popin")
     postgres.start()
 
@@ -91,6 +94,7 @@ jooq {
                         isImmutablePojos = false
                         isFluentSetters = false
                         isDaos = true
+                        isSpatialTypes = true
                     }
 
                     target.apply {

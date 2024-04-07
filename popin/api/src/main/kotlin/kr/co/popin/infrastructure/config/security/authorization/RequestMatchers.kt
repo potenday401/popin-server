@@ -19,6 +19,8 @@ class RequestMatchers (
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/login"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/send/email/confirm-code"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/verify/email/confirm-code"),
+        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/contents"),
+        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/photos"),
     ).apply {
         if ("prod" !in activeProfiles) {
             add(AntPathRequestMatcher("/docs/**"))
