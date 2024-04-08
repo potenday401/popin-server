@@ -16,8 +16,9 @@ class ContentController(
 ) {
 
     @PostMapping
-    fun postContent(@RequestBody request: PostContentRequest): SuccessResponse {
-        contentService.post(PostContentCommand(request.title,
+    fun postContent(userId: String, @RequestBody request: PostContentRequest): SuccessResponse {
+        contentService.post(PostContentCommand(userId,
+                                               request.title,
                                                request.address,
                                                request.latitude,
                                                request.longitude))

@@ -5,8 +5,9 @@ import java.time.LocalDateTime
 
 class ContentEntity(
     val id: Long,
+    val userId: String,
     val title: String,
     val address: String,
     val point: Point,
-    val createdDateTime: LocalDateTime
+    val createdAt: LocalDateTime
 )

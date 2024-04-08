@@ -3,12 +3,9 @@ package kr.co.popin.presentation.photo
 import kr.co.popin.application.content.dtos.UploadPhotoCommand
 import kr.co.popin.application.photo.PhotoService
 import kr.co.popin.infrastructure.http.response.SuccessResponse
-import kr.co.popin.presentation.content.request.PostPhotoRequest
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestPart
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDateTime
 
 @RequestMapping("/photos")
 @RestController
@@ -18,12 +15,14 @@ class PhotoController(
 
     @PostMapping
     fun postPhoto(
-        @RequestPart("image-info") request: PostPhotoRequest,
+        @RequestParam("contentId") contentId: Long,
+        @RequestParam("createdDateTime") createdDateTime: String,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
-        photoService.upload(UploadPhotoCommand(request.contentId,
+        val format = LocalDateTime.parse(createdDateTime)
+        photoService.upload(UploadPhotoCommand(contentId,
                                                image,
-                                               request.createdDateTime))
+                                               format))
         return SuccessResponse()
     }
 

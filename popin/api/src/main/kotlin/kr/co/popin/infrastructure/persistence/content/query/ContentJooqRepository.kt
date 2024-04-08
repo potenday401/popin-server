@@ -24,6 +24,7 @@ class ContentJooqRepository(
         return dslContext.select(CONTENT.ID)
             .from(CONTENT)
             .orderBy(CONTENT.ID.desc())
+            .limit(1)
             .fetchOneInto(Long::class.java)
             ?.let { it + 1 }
             ?: 1
@@ -31,12 +32,18 @@ class ContentJooqRepository(
 
     override fun insert(entity: ContentEntity) {
         dslContext.insertInto(CONTENT)
-            .columns(CONTENT.ID, CONTENT.TITLE, CONTENT.ADDRESS, DSL.field("point"), CONTENT.CREATED_DATE_TIME)
+            .columns(CONTENT.ID,
+                     CONTENT.USER_ID,
+                     CONTENT.TITLE,
+                     CONTENT.ADDRESS,
+                     DSL.field("point"),
+                     CONTENT.CREATED_AT)
             .values(entity.id,
+                    entity.userId,
                     entity.title,
                     entity.address,
                     DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)"),
-                    entity.createdDateTime.atOffset(ZoneOffset.UTC))
+                    entity.createdAt.atOffset(ZoneOffset.UTC))
             .execute()
     }
 }

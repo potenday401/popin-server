@@ -22,6 +22,7 @@ class PhotoJooqRepository(
         return dslContext.select(PHOTO.ID)
             .from(PHOTO)
             .orderBy(PHOTO.ID.desc())
+            .limit(1)
             .fetchOneInto(Long::class.java)
             ?.let { it + 1 }
             ?: 1

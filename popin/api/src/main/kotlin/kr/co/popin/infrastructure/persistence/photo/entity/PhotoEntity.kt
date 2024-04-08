@@ -2,9 +2,9 @@ package kr.co.popin.infrastructure.persistence.photo.entity
 
 import java.time.LocalDateTime
 
-class PhotoEntity(
+data class PhotoEntity(
     val id: Long,
     val contentId: Long,
     val url: String,
-    val createdDateTime: LocalDateTime
+    val createdAt: LocalDateTime
 )

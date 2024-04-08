@@ -22,14 +22,14 @@ class PhotoPersistenceAdapter(
         return Photo(entity.id,
                      entity.contentId,
                      entity.url,
-                     entity.createdDateTime)
+                     entity.createdAt)
     }
 
     private fun toPersistenceEntity(domain: Photo): PhotoEntity {
         return PhotoEntity(domain.id,
                            domain.contentId,
                            domain.url,
-                           domain.createdDateTime)
+                           domain.createdAt)
     }
 
 }

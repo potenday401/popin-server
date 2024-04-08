@@ -6,5 +6,5 @@ data class Photo(
     val id: Long,
     val contentId: Long,
     val url: String,
-    val createdDateTime: LocalDateTime
+    val createdAt: LocalDateTime
 )

@@ -1,6 +1,6 @@
 package kr.co.popin.infrastructure.config.aws.s3
 
-import kr.co.popin.infrastructure.config.aws.credential.property.AmazonCredentialProperties
+import kr.co.popin.infrastructure.config.aws.credential.property.AmazonS3Properties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
@@ -12,12 +12,12 @@ import software.amazon.awssdk.transfer.s3.SizeConstant.MB
 
 @Configuration
 class AmazonS3Config(
-    private val properties: AmazonCredentialProperties
+    private val properties: AmazonS3Properties
 ) {
 
     @Bean
     fun s3Client(): S3AsyncClient {
-        val credentials = AwsBasicCredentials.create(properties.ses.accessKey, properties.ses.secretKey)
+        val credentials = AwsBasicCredentials.create(properties.accessKey, properties.secretKey)
         return S3AsyncClient.crtBuilder()
             .credentialsProvider { credentials }
             .region(Region.AP_NORTHEAST_2)
