@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS postgis;
+
 CREATE TABLE "popin"."content"
 (
     id         BIGSERIAL PRIMARY KEY,

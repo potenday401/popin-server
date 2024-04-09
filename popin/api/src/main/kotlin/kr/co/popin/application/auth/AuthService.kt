@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Service
-class AuthService (
+class AuthService(
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
     private val authPersistenceAdapter: IAuthTokenPersistencePort,
@@ -166,6 +166,11 @@ class AuthService (
         }
 
         emailAuthPersistenceAdapter.updateAll(expiredEmailAuthCodes)
+    }
+
+    @Transactional(readOnly = true)
+    fun getUserIdByAccessToken(): String {
+        return getUserPrincipal().getUserId()
     }
 
     private fun createUserPrincipal(email: String, password: String): UserPrincipal {
