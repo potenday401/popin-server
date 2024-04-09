@@ -13,6 +13,7 @@ import kr.co.popin.domain.model.user.vo.UserEmail
 import kr.co.popin.domain.model.user.vo.UserId
 import kr.co.popin.infrastructure.config.jwt.service.JwtTokenProvider
 import kr.co.popin.infrastructure.config.security.dto.UserPrincipal
+import kr.co.popin.infrastructure.config.security.service.UserDetailsService
 import kr.co.popin.infrastructure.persistence.auth.EmailAuthPersistenceAdapter
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -24,15 +25,15 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Service
-class AuthService(
+class AuthService (
+    private val userDetailsService: UserDetailsService,
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
     private val authPersistenceAdapter: IAuthTokenPersistencePort,
     private val emailAuthPersistenceAdapter: EmailAuthPersistenceAdapter
 ) {
     @Transactional
-    fun createNewAuthentication(email: String, password: String): AuthTokenInfo {
-        val userPrincipal = createUserPrincipal(email, password)
+    fun createNewAuthentication(userPrincipal: UserPrincipal): AuthTokenInfo {
         val userId = UserId(userPrincipal.getUserId())
 
         val accessToken = AuthToken.newAuthToken(
@@ -56,13 +57,20 @@ class AuthService(
         )
     }
 
+    @Transactional
+    fun createNewAuthentication(email: String, password: String): AuthTokenInfo {
+        val userPrincipal = createUserPrincipal(email, password)
+
+        return this.createNewAuthentication(userPrincipal)
+    }
+
     @Transactional(readOnly = true)
     fun existCheckAuthToken(
         aToken: String,
-        aTokenType: AuthTokenType
+        aTokenType: AuthTokenType,
+        aUserId: String
     ) {
-        val userPrincipal = getUserPrincipal()
-        val userId = UserId(userPrincipal.getUserId())
+        val userId = UserId(aUserId)
         val token = Token(aToken)
 
         authPersistenceAdapter.findByUserIdAndTokenAndTokenType(
@@ -72,12 +80,50 @@ class AuthService(
         ) ?: throw NotFoundAuthTokenException()
     }
 
+    @Transactional(readOnly = true)
+    fun existCheckAuthToken(
+        aToken: String,
+        aTokenType: AuthTokenType
+    ) {
+        val userPrincipal = getUserPrincipal()
+
+        this.existCheckAuthToken(
+            aToken = aToken,
+            aTokenType = aTokenType,
+            aUserId = userPrincipal.getUserId()
+        )
+    }
+
+    @Transactional
+    fun expireAuthTokens(aUserId: String) {
+        val userId = UserId(aUserId)
+
+        authPersistenceAdapter.deleteAllByUserId(userId)
+    }
+
     @Transactional
     fun expireAuthTokens() {
         val userPrincipal = getUserPrincipal()
-        val userId = UserId(userPrincipal.getUserId())
 
-        authPersistenceAdapter.deleteAllByUserId(userId)
+        this.expireAuthTokens(userPrincipal.getUserId())
+    }
+
+    @Transactional
+    fun refresh(accessToken: String, refreshToken: String): AuthTokenInfo {
+        jwtTokenProvider.validateToken(refreshToken)
+
+        val userPrincipal = userDetailsService.loadUserByUsername(
+            jwtTokenProvider.extractUsername(refreshToken)
+        ) as UserPrincipal
+
+        this.existCheckAuthToken(
+            aToken = refreshToken,
+            aTokenType = AuthTokenType.REFRESH,
+            aUserId = userPrincipal.getUserId()
+        )
+        this.expireAuthTokens(userPrincipal.getUserId())
+
+        return this.createNewAuthentication(userPrincipal)
     }
 
     @Transactional
