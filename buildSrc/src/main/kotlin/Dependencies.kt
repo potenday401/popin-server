@@ -17,6 +17,9 @@ fun `spring-boot-starter-springdoc-webmvc-ui`(version: String = Versions.SPRINGD
 val `jackson-module-kotlin`
     get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
+fun `kotlin-logging`(version: String = "3.0.5") =
+    "io.github.microutils:kotlin-logging-jvm:$version"
+
 val `spring-boot-configuration-processor`
     get() = "org.springframework.boot:spring-boot-configuration-processor"
 
@@ -52,8 +55,10 @@ fun `java-native-access`(version: String = Versions.JAVA_NATIVE_ACCESS) =
 
 fun `jjwt-api`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-api:${version}"
+
 fun `jjwt-impl`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-impl:${version}"
+
 fun `jjwt-jackson`(version: String = Versions.JJWT) =
     "io.jsonwebtoken:jjwt-jackson:${version}"
 
@@ -62,5 +67,10 @@ fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
 
 fun `aws-secret-manager-jdbc`(version: String = Versions.AWS_SECRET_MAMAGER_JDBC) =
     "com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:${version}"
+
+fun `aws-sdk-s3`(version: String = "2.25.24") = "software.amazon.awssdk:s3:$version"
+fun `aws-sdk-s3-transfer-manager`(version: String = "2.25.24") = "software.amazon.awssdk:s3-transfer-manager:$version"
+fun `aws-crt`(version: String = "0.29.14") = "software.amazon.awssdk.crt:aws-crt:$version"
+
 
 fun `locationtech-jts-core`(version: String = Versions.JTS_CORE) = "org.locationtech.jts:jts-core:${version}"

@@ -19,6 +19,7 @@ dependencies {
     implementation(`spring-boot-starter-security`)
 
     implementation(`jackson-module-kotlin`)
+    runtimeOnly(`kotlin-logging`())
 
     implementation(`jjwt-api`())
     runtimeOnly(`jjwt-impl`())
@@ -30,5 +31,8 @@ dependencies {
     runtimeOnly(`postgres-connector`())
 
     implementation(`aws-sdk-ses`())
+    implementation(`aws-sdk-s3`())
+    implementation(`aws-sdk-s3-transfer-manager`())
+    implementation(`aws-crt`())
     implementation(`aws-secret-manager-jdbc`())
 }

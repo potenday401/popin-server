@@ -2,7 +2,7 @@ version: '1.0'
 
 services:
   popin-database:
-    image: postgres:16.2
+    image: postgis/postgis:16beta2-master
     restart: always
     container_name: "popin_database"
     hostname: localhost
