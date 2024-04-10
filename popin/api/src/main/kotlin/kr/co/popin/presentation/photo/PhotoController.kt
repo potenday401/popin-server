@@ -39,10 +39,15 @@ class PhotoController(
         @RequestParam("createdDateTime") createdDateTime: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
-        val photo = photoService.upload(UploadPhotoCommand(contentId,
-                                                           image,
-                                                           createdDateTime))
-        val response = PostPhotoResponse(photo.id, photo.contentId, photo.url, photo.createdAt)
+        val photo = photoService.upload(
+            UploadPhotoCommand(contentId = contentId,
+                               image = image,
+                               createdDateTime = createdDateTime)
+        )
+        val response = PostPhotoResponse(photoId = photo.id,
+                                         contentId = photo.contentId,
+                                         url = photo.url,
+                                         createdAt = photo.createdAt)
         return SuccessResponse(responseData = response)
     }
 

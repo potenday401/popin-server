@@ -17,9 +17,9 @@ class PhotoService(
     @Transactional
     fun upload(command: UploadPhotoCommand): Photo {
         val url = s3Uploader.upload(command.image)
-        return photoPersistenceAdapter.save(command.contentId,
-                                            url,
-                                            command.createdDateTime)
+        return photoPersistenceAdapter.save(contentId = command.contentId,
+                                            url = url,
+                                            createdDateTime = command.createdDateTime)
     }
 
 }

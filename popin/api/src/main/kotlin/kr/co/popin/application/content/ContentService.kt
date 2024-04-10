@@ -21,10 +21,10 @@ class ContentService(
         val userId = authService.getUserIdByAccessToken()
         val coordinate = Coordinate(contentCommand.longitude, contentCommand.latitude)
         val point = geometryFactory.createPoint(coordinate)
-        return contentPersistenceAdapter.save(userId,
-                                              contentCommand.title,
-                                              contentCommand.address,
-                                              point)
+        return contentPersistenceAdapter.save(userId = userId,
+                                              title = contentCommand.title,
+                                              address = contentCommand.address,
+                                              point = point)
     }
 
 }
