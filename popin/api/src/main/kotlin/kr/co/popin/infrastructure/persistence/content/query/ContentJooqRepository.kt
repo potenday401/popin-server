@@ -25,6 +25,7 @@ class ContentJooqRepository(
             .from(CONTENT)
             .orderBy(CONTENT.ID.desc())
             .limit(1)
+            .forUpdate()
             .fetchOneInto(Long::class.java)
             ?.let { it + 1 }
             ?: 1
