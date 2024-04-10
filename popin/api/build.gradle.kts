@@ -19,6 +19,7 @@ dependencies {
     implementation(`spring-boot-starter-security`)
 
     implementation(`jackson-module-kotlin`)
+    runtimeOnly(`kotlin-logging`())
 
     implementation(`jjwt-api`())
     runtimeOnly(`jjwt-impl`())

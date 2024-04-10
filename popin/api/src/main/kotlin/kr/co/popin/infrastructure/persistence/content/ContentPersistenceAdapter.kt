@@ -5,6 +5,7 @@ import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.content.query.ContentJooqRepository
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 
@@ -13,6 +14,7 @@ class ContentPersistenceAdapter(
     private val contentRepository: ContentJooqRepository,
 ) {
 
+    @Transactional
     fun save(userId: String, title: String, address: String, point: Point): Content {
         val id = contentRepository.generateId()
         val contentEntity = ContentEntity(id, userId, title, address, point, LocalDateTime.now())

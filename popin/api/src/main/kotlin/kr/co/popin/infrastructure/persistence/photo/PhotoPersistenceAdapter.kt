@@ -4,6 +4,7 @@ import kr.co.popin.domain.model.photo.Photo
 import kr.co.popin.infrastructure.persistence.photo.entity.PhotoEntity
 import kr.co.popin.infrastructure.persistence.photo.query.PhotoJooqRepository
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Component
@@ -11,6 +12,7 @@ class PhotoPersistenceAdapter(
     private val photoRepository: PhotoJooqRepository
 ) {
 
+    @Transactional
     fun save(contentId: Long, url: String, createdDateTime: LocalDateTime): Photo {
         val id = photoRepository.generateId()
         val photoEntity = PhotoEntity(id, contentId, url, createdDateTime)

@@ -17,6 +17,9 @@ fun `spring-boot-starter-springdoc-webmvc-ui`(version: String = Versions.SPRINGD
 val `jackson-module-kotlin`
     get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
+fun `kotlin-logging`(version: String = "3.0.5") =
+    "io.github.microutils:kotlin-logging-jvm:$version"
+
 val `spring-boot-configuration-processor`
     get() = "org.springframework.boot:spring-boot-configuration-processor"
 

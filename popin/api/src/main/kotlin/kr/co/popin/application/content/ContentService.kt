@@ -7,6 +7,7 @@ import kr.co.popin.infrastructure.persistence.content.ContentPersistenceAdapter
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ContentService(
@@ -15,6 +16,7 @@ class ContentService(
     private val geometryFactory: GeometryFactory
 ) {
 
+    @Transactional
     fun post(contentCommand: PostContentCommand): Content {
         val userId = authService.getUserIdByAccessToken()
         val coordinate = Coordinate(contentCommand.longitude, contentCommand.latitude)

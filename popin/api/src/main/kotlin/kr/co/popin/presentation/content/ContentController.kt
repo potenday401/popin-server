@@ -31,8 +31,7 @@ class ContentController(
         error = [
             ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
             ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
-            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
-            ApiErrorResponseCode(ErrorResponseCode.UNKNOWN)
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
         ]
     )
     @Operation(summary = "컨텐츠 등록")
