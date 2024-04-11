@@ -29,4 +29,11 @@ class PhotoJooqRepository(
             ?: 1
     }
 
+    fun findAllByContentIds(contentIds: Collection<Long>): List<PhotoEntity> {
+        return dslContext.select(PHOTO)
+            .from(PHOTO)
+            .where(PHOTO.CONTENT_ID.`in`(contentIds))
+            .fetchInto(PhotoEntity::class.java)
+    }
+
 }

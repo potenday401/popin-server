@@ -3,6 +3,7 @@ package kr.co.popin.infrastructure.persistence.content
 import kr.co.popin.domain.model.content.Content
 import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.content.query.ContentJooqRepository
+import kr.co.popin.infrastructure.persistence.content.query.ContentQueryCondition
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -14,6 +15,12 @@ class ContentPersistenceAdapter(
     private val contentRepository: ContentJooqRepository,
 ) {
 
+    @Transactional(readOnly = true)
+    fun getByQueryCondition(condition: ContentQueryCondition): List<Content> {
+        return contentRepository.findByQueryCondition(condition)
+            .map { this.toDomain(it) }
+    }
+
     @Transactional
     fun save(userId: String, title: String, address: String, point: Point): Content {
         val id = contentRepository.generateId()
@@ -23,21 +30,21 @@ class ContentPersistenceAdapter(
     }
 
     private fun toDomain(entity: ContentEntity): Content {
-        return Content(entity.id,
-                       entity.userId,
-                       entity.title,
-                       entity.address,
-                       entity.point,
-                       entity.createdAt)
+        return Content(id = entity.id,
+                       userId = entity.userId,
+                       title = entity.title,
+                       address = entity.address,
+                       point = entity.point,
+                       createdAt = entity.createdAt)
     }
 
     private fun toPersistenceEntity(domain: Content): ContentEntity {
-        return ContentEntity(domain.id,
-                             domain.userId,
-                             domain.title,
-                             domain.address,
-                             domain.point,
-                             domain.createdAt)
+        return ContentEntity(id = domain.id,
+                             userId = domain.userId,
+                             title = domain.title,
+                             address = domain.address,
+                             point = domain.point,
+                             createdAt = domain.createdAt)
     }
 
 }

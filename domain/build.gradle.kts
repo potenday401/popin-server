@@ -94,7 +94,7 @@ jooq {
                         isImmutablePojos = false
                         isFluentSetters = false
                         isDaos = true
-                        isSpatialTypes = true
+                        isSpatialTypes = false
                     }
 
                     target.apply {

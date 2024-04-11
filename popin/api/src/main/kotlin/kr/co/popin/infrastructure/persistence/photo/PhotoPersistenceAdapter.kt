@@ -12,6 +12,12 @@ class PhotoPersistenceAdapter(
     private val photoRepository: PhotoJooqRepository
 ) {
 
+    @Transactional(readOnly = true)
+    fun getByContentIds(contentIds: Collection<Long>): List<Photo> {
+        return photoRepository.findAllByContentIds(contentIds)
+            .map { this.toDomain(it) }
+    }
+
     @Transactional
     fun save(contentId: Long, url: String, createdDateTime: LocalDateTime): Photo {
         val id = photoRepository.generateId()
