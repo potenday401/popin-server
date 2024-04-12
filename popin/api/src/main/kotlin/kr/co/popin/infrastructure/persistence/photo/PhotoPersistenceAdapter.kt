@@ -13,17 +13,29 @@ class PhotoPersistenceAdapter(
 ) {
 
     @Transactional(readOnly = true)
+    fun getById(photoId: Long): Photo? {
+        val photoEntity = photoRepository.findById(photoId) ?: return null
+        return this.toDomain(photoEntity)
+    }
+
+    @Transactional(readOnly = true)
     fun getByContentIds(contentIds: Collection<Long>): List<Photo> {
         return photoRepository.findAllByContentIds(contentIds)
             .map { this.toDomain(it) }
     }
 
     @Transactional
-    fun save(contentId: Long, url: String, createdDateTime: LocalDateTime): Photo {
+    fun save(contentId: Long, url: String, createdAt: LocalDateTime): Photo {
         val id = photoRepository.generateId()
-        val photoEntity = PhotoEntity(id, contentId, url, createdDateTime)
+        val photoEntity = PhotoEntity(id, contentId, url, createdAt)
         photoRepository.insert(photoEntity)
         return this.toDomain(photoEntity)
+    }
+
+    @Transactional
+    fun update(photo: Photo) {
+        val photoEntity = this.toPersistenceEntity(photo)
+        photoRepository.update(photoEntity)
     }
 
     private fun toDomain(entity: PhotoEntity): Photo {

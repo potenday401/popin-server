@@ -1,4 +1,4 @@
-package kr.co.popin.application.content.dtos
+package kr.co.popin.application.photo.dtos
 
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 data class UploadPhotoCommand(
     val contentId: Long,
     val image: MultipartFile,
-    val createdDateTime: LocalDateTime
+    val createdAt: LocalDateTime
 )

@@ -95,20 +95,24 @@ class ContentController(
         error = [
             ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
             ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
-            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_FOUND_RESOURCE)
         ]
     )
     @Operation(summary = "컨텐츠 수정")
     @PutMapping("/{contentId}")
-    fun putContent(
+    fun putContents(
         @PathVariable contentId: Long,
         @RequestBody request: PutContentRequest,
     ): SuccessResponse {
-        contentService.update(UpdateContentCommand(contentId = contentId,
-                                                   title = request.title,
-                                                   address = request.address,
-                                                   latitude = request.latitude,
-                                                   longitude = request.longitude))
+        contentService.update(
+            UpdateContentCommand(contentId = contentId,
+                                 title = request.title,
+                                 address = request.address,
+                                 latitude = request.latitude,
+                                 longitude = request.longitude,
+                                 createdAt = request.createdAt)
+        )
         return SuccessResponse()
     }
 

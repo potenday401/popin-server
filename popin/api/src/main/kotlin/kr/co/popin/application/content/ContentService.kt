@@ -28,6 +28,7 @@ class ContentService(
 
     @Transactional(readOnly = true)
     fun getWithPhoto(contentQuery: GetContentQuery): List<ContentWithPhoto> {
+        // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
         val userId = authService.getUserIdByAccessToken()
         val area = WKTReader(geometryFactory).read(contentQuery.area)
         if (area !is Polygon) {
@@ -68,6 +69,7 @@ class ContentService(
         // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
         val userId = authService.getUserIdByAccessToken()
         val content = contentPersistenceAdapter.getById(command.contentId)
+            ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode())
         if (content.userId !== userId) {
             throw IllegalArgumentException(ErrorResponseCode.ACCESS_DENIED.getRealCode())
         }
@@ -78,7 +80,7 @@ class ContentService(
             newPoint = geometryFactory.createPoint(coordinate)
         }
 
-        content.update(command.title, command.address, newPoint)
+        content.update(command.title, command.address, newPoint, command.createdAt)
         contentPersistenceAdapter.update(content)
     }
 

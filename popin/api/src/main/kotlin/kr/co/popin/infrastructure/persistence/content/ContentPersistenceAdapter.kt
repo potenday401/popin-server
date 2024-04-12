@@ -1,7 +1,6 @@
 package kr.co.popin.infrastructure.persistence.content
 
 import kr.co.popin.domain.model.content.Content
-import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.content.query.ContentJooqRepository
 import kr.co.popin.infrastructure.persistence.content.query.ContentQueryCondition
@@ -17,9 +16,8 @@ class ContentPersistenceAdapter(
 ) {
 
     @Transactional(readOnly = true)
-    fun getById(contentId: Long): Content {
-        val contentEntity = (contentRepository.findById(contentId)
-            ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode()))
+    fun getById(contentId: Long): Content? {
+        val contentEntity = contentRepository.findById(contentId) ?: return null
         return this.toDomain(contentEntity)
     }
 
@@ -39,7 +37,8 @@ class ContentPersistenceAdapter(
 
     @Transactional
     fun update(content: Content) {
-        contentRepository.update(this.toPersistenceEntity(content))
+        val contentEntity = this.toPersistenceEntity(content)
+        contentRepository.update(contentEntity)
     }
 
     private fun toDomain(entity: ContentEntity): Content {
