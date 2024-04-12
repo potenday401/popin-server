@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.content.ContentService
 import kr.co.popin.application.content.dtos.GetContentQuery
 import kr.co.popin.application.content.dtos.PostContentCommand
+import kr.co.popin.application.content.dtos.UpdateContentCommand
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiSuccessResponseCode
@@ -13,6 +14,7 @@ import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.http.enums.SuccessResponseCode
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.content.request.PostContentRequest
+import kr.co.popin.presentation.content.request.PutContentRequest
 import kr.co.popin.presentation.content.response.GetContentResponse
 import kr.co.popin.presentation.content.response.PostContentResponse
 import org.springframework.web.bind.annotation.*
@@ -84,6 +86,30 @@ class ContentController(
                                            latitude = content.point.x,
                                            createdAt = content.createdAt)
         return SuccessResponse(responseData = response)
+    }
+
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
+        ]
+    )
+    @Operation(summary = "컨텐츠 수정")
+    @PutMapping("/{contentId}")
+    fun putContent(
+        @PathVariable contentId: Long,
+        @RequestBody request: PutContentRequest,
+    ): SuccessResponse {
+        contentService.update(UpdateContentCommand(contentId = contentId,
+                                                   title = request.title,
+                                                   address = request.address,
+                                                   latitude = request.latitude,
+                                                   longitude = request.longitude))
+        return SuccessResponse()
     }
 
 }

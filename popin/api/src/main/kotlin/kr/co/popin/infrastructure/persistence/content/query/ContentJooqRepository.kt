@@ -72,4 +72,5 @@ class ContentJooqRepository(
                     entity.createdAt.atOffset(ZoneOffset.UTC))
             .execute()
     }
+
 }

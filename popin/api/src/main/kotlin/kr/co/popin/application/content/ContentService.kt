@@ -4,6 +4,7 @@ import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.content.dtos.ContentWithPhoto
 import kr.co.popin.application.content.dtos.GetContentQuery
 import kr.co.popin.application.content.dtos.PostContentCommand
+import kr.co.popin.application.content.dtos.UpdateContentCommand
 import kr.co.popin.domain.model.content.Content
 import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.persistence.content.ContentPersistenceAdapter
@@ -11,6 +12,7 @@ import kr.co.popin.infrastructure.persistence.content.query.ContentQueryConditio
 import kr.co.popin.infrastructure.persistence.photo.PhotoPersistenceAdapter
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.Polygon
 import org.locationtech.jts.io.WKTReader
 import org.springframework.stereotype.Service
@@ -50,15 +52,34 @@ class ContentService(
     }
 
     @Transactional
-    fun post(contentCommand: PostContentCommand): Content {
+    fun post(command: PostContentCommand): Content {
         // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
         val userId = authService.getUserIdByAccessToken()
-        val coordinate = Coordinate(contentCommand.longitude, contentCommand.latitude)
+        val coordinate = Coordinate(command.longitude, command.latitude)
         val point = geometryFactory.createPoint(coordinate)
         return contentPersistenceAdapter.save(userId = userId,
-                                              title = contentCommand.title,
-                                              address = contentCommand.address,
+                                              title = command.title,
+                                              address = command.address,
                                               point = point)
+    }
+
+    @Transactional
+    fun update(command: UpdateContentCommand) {
+        // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
+        val userId = authService.getUserIdByAccessToken()
+        val content = contentPersistenceAdapter.getById(command.contentId)
+        if (content.userId !== userId) {
+            throw IllegalArgumentException(ErrorResponseCode.ACCESS_DENIED.getRealCode())
+        }
+
+        var newPoint: Point? = null
+        if (command.longitude != null && command.latitude != null) {
+            val coordinate = Coordinate(command.longitude, command.latitude)
+            newPoint = geometryFactory.createPoint(coordinate)
+        }
+
+        content.update(command.title, command.address, newPoint)
+        contentPersistenceAdapter.update(content)
     }
 
 }
