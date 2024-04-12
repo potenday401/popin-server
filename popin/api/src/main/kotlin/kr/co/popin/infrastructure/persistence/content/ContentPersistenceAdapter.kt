@@ -41,6 +41,12 @@ class ContentPersistenceAdapter(
         contentRepository.update(contentEntity)
     }
 
+    @Transactional
+    fun delete(content: Content) {
+        val contentEntity = this.toPersistenceEntity(content)
+        contentRepository.delete(contentEntity)
+    }
+
     private fun toDomain(entity: ContentEntity): Content {
         return Content(id = entity.id,
                        userId = entity.userId,

@@ -38,6 +38,12 @@ class PhotoPersistenceAdapter(
         photoRepository.update(photoEntity)
     }
 
+    @Transactional
+    fun delete(photo: Photo) {
+        val photoEntity = this.toPersistenceEntity(photo)
+        photoRepository.delete(photoEntity)
+    }
+
     private fun toDomain(entity: PhotoEntity): Photo {
         return Photo(entity.id,
                      entity.contentId,

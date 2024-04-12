@@ -34,27 +34,20 @@ class ContentJooqRepository(
             ?: 1
     }
 
-    fun findByQueryCondition(condition: ContentQueryCondition): List<ContentEntity> {
+    override fun findById(id: Long?): ContentEntity? {
         return dslContext.selectFrom(CONTENT)
-            .where(
-                CONTENT.USER_ID.eq(condition.userId)
-            )
-            .fetch()
-            .map { record ->
-                val pureWkt = this.removeSridPrefix(record.point.toString())
-                val point = wktReader.read(pureWkt) as Point
-                ContentEntity(record.id!!,
-                              record.userId!!,
-                              record.title!!,
-                              record.address!!,
-                              point,
-                              record.createdAt!!.toLocalDateTime())
-            }
+            .where(CONTENT.ID.eq(id))
+            .fetchOne()
+            ?.let { this.toEntity(it) }
     }
 
-    private fun removeSridPrefix(wktString: String): String {
-        return wktString.replaceFirst("^SRID=\\d+;".toRegex(), "").trim()
+    fun findByQueryCondition(condition: ContentQueryCondition): List<ContentEntity> {
+        return dslContext.selectFrom(CONTENT)
+            .where(CONTENT.USER_ID.eq(condition.userId))
+            .fetch()
+            .map { this.toEntity(it) }
     }
+
 
     override fun insert(entity: ContentEntity) {
         dslContext.insertInto(CONTENT)
@@ -71,6 +64,21 @@ class ContentJooqRepository(
                     DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)"),
                     entity.createdAt.atOffset(ZoneOffset.UTC))
             .execute()
+    }
+
+    private fun toEntity(record: JContentRecord): ContentEntity {
+        val wktString = record.point.toString()
+            .replaceFirst("SRID=\\d+;", "")
+            .trim()
+        val point = wktReader.read(wktString) as Point
+        return ContentEntity(
+            id = record.id ?: throw IllegalArgumentException(),
+            userId = record.userId ?: throw IllegalArgumentException(),
+            title = record.title ?: throw IllegalArgumentException(),
+            address = record.address ?: throw IllegalArgumentException(),
+            point = point,
+            createdAt = record.createdAt?.toLocalDateTime() ?: throw IllegalArgumentException(),
+        )
     }
 
 }

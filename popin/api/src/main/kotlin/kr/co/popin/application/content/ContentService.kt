@@ -84,4 +84,17 @@ class ContentService(
         contentPersistenceAdapter.update(content)
     }
 
+    @Transactional
+    fun delete(contentId: Long) {
+        // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
+        val userId = authService.getUserIdByAccessToken()
+        val content = contentPersistenceAdapter.getById(contentId)
+            ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode())
+        if (content.userId !== userId) {
+            throw IllegalArgumentException(ErrorResponseCode.ACCESS_DENIED.getRealCode())
+        }
+
+        contentPersistenceAdapter.delete(content)
+    }
+
 }

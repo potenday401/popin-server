@@ -116,4 +116,24 @@ class ContentController(
         return SuccessResponse()
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_FOUND_RESOURCE)
+        ]
+    )
+    @Operation(summary = "컨텐츠 삭제")
+    @DeleteMapping("/{contentId}")
+    fun deleteContents(
+        @PathVariable contentId: Long
+    ): SuccessResponse {
+        contentService.delete(contentId)
+        return SuccessResponse()
+    }
+
 }

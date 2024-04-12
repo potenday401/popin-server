@@ -36,4 +36,13 @@ class PhotoService(
         return photo
     }
 
+    @Transactional
+    fun delete(photoId: Long) {
+        // TODO: MethodArgumentResolver 추가 후 photoId -> contentId -> userId 권한 확인 필요
+        val photo = photoPersistenceAdapter.getById(photoId)
+            ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode())
+        photoPersistenceAdapter.delete(photo)
+        s3Uploader.delete(photo.url)
+    }
+
 }

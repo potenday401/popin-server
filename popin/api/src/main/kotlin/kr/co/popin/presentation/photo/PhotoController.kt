@@ -83,4 +83,24 @@ class PhotoController(
         return SuccessResponse(responseData = response)
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_FOUND_RESOURCE)
+        ]
+    )
+    @Operation(summary = "사진 삭제")
+    @DeleteMapping("/{photoId}")
+    fun deletePhotos(
+        @PathVariable("photoId") photoId: Long
+    ): SuccessResponse {
+        photoService.delete(photoId)
+        return SuccessResponse()
+    }
+
 }
