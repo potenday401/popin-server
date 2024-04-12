@@ -70,7 +70,7 @@ class ContentService(
         val userId = authService.getUserIdByAccessToken()
         val content = contentPersistenceAdapter.getById(command.contentId)
             ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode())
-        if (content.userId !== userId) {
+        if (content.userId != userId) {
             throw IllegalArgumentException(ErrorResponseCode.ACCESS_DENIED.getRealCode())
         }
 
@@ -90,7 +90,7 @@ class ContentService(
         val userId = authService.getUserIdByAccessToken()
         val content = contentPersistenceAdapter.getById(contentId)
             ?: throw NoSuchElementException(ErrorResponseCode.NOT_FOUND_RESOURCE.getRealCode())
-        if (content.userId !== userId) {
+        if (content.userId != userId) {
             throw IllegalArgumentException(ErrorResponseCode.ACCESS_DENIED.getRealCode())
         }
 

@@ -2,6 +2,7 @@ import nu.studer.gradle.jooq.JooqEdition
 import nu.studer.gradle.jooq.JooqGenerate
 import org.jooq.codegen.KotlinGenerator
 import org.jooq.codegen.example.JPrefixGeneratorStrategy
+import org.jooq.meta.jaxb.ForcedType
 import org.jooq.meta.postgres.PostgresDatabase
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
@@ -9,13 +10,14 @@ import org.postgresql.Driver as PostgresDriver
 
 plugins {
     `jooq-gradle-plugin`()
-
     `flyway-gradle-plugin`()
 }
 
 dependencies {
     implementation(`uuid-generator`())
     implementation(`locationtech-jts-core`())
+    implementation(`jooq-meta-extensions`)
+    implementation(`postgis-jdbc`())
     jooqGenerator(`postgres-connector`())
 }
 
@@ -86,6 +88,14 @@ jooq {
                     database.apply {
                         name = PostgresDatabase::class.qualifiedName
                         inputSchema = postgresDatabaseName
+                        forcedTypes.apply {
+                            ForcedType()
+                                .withName("Point")
+                                .withUserType("org.locationtech.jts.geom.Point")
+                                .withIncludeExpression(".*Geometry.*")
+                                .withIncludeTypes(".*")
+                                .withBinding("kr.co.popin.util.PostGisPointBinding")
+                        }
                     }
 
                     generate.apply {

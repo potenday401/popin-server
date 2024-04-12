@@ -66,9 +66,19 @@ class ContentJooqRepository(
             .execute()
     }
 
+    override fun update(entity: ContentEntity) {
+        dslContext.update(CONTENT)
+            .set(CONTENT.TITLE, entity.title)
+            .set(CONTENT.ADDRESS, entity.address)
+            .set(DSL.field("point"), DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)") as Any)
+            .set(CONTENT.CREATED_AT, entity.createdAt.atOffset(ZoneOffset.UTC))
+            .where(CONTENT.ID.eq(entity.id))
+            .execute()
+    }
+
     private fun toEntity(record: JContentRecord): ContentEntity {
         val wktString = record.point.toString()
-            .replaceFirst("SRID=\\d+;", "")
+            .replaceFirst("SRID=\\d+;".toRegex(), "")
             .trim()
         val point = wktReader.read(wktString) as Point
         return ContentEntity(
