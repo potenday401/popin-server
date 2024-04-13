@@ -6,12 +6,13 @@ data class Photo(
     val id: Long,
     val contentId: Long,
     var url: String,
-    var createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    var updatedAt: LocalDateTime,
 ) {
 
-    fun change(newUrl: String, createdAt: LocalDateTime) {
+    fun change(newUrl: String, updatedAt: LocalDateTime) {
         this.url = newUrl
-        this.createdAt = createdAt
+        this.updatedAt = updatedAt
     }
 
 }

@@ -56,13 +56,15 @@ class ContentJooqRepository(
                      CONTENT.TITLE,
                      CONTENT.ADDRESS,
                      DSL.field("point"),
-                     CONTENT.CREATED_AT)
+                     CONTENT.CREATED_AT,
+                     CONTENT.UPDATED_AT)
             .values(entity.id,
                     entity.userId,
                     entity.title,
                     entity.address,
                     DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)"),
-                    entity.createdAt.atOffset(ZoneOffset.UTC))
+                    entity.createdAt.atOffset(ZoneOffset.UTC),
+                    entity.updatedAt.atOffset(ZoneOffset.UTC))
             .execute()
     }
 
@@ -71,7 +73,7 @@ class ContentJooqRepository(
             .set(CONTENT.TITLE, entity.title)
             .set(CONTENT.ADDRESS, entity.address)
             .set(DSL.field("point"), DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)") as Any)
-            .set(CONTENT.CREATED_AT, entity.createdAt.atOffset(ZoneOffset.UTC))
+            .set(CONTENT.UPDATED_AT, entity.updatedAt.atOffset(ZoneOffset.UTC))
             .where(CONTENT.ID.eq(entity.id))
             .execute()
     }
@@ -88,6 +90,7 @@ class ContentJooqRepository(
             address = record.address ?: throw IllegalArgumentException(),
             point = point,
             createdAt = record.createdAt?.toLocalDateTime() ?: throw IllegalArgumentException(),
+            updatedAt = record.updatedAt?.toLocalDateTime() ?: throw IllegalArgumentException(),
         )
     }
 

@@ -9,5 +9,6 @@ class ContentEntity(
     val title: String,
     val address: String,
     val point: Point,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

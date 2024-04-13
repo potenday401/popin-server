@@ -74,17 +74,21 @@ class ContentController(
     fun postContents(
         @RequestBody request: PostContentRequest
     ): SuccessResponse {
-        val content = contentService.post(PostContentCommand(title = request.title,
-                                                             address = request.address,
-                                                             latitude = request.latitude,
-                                                             longitude = request.longitude))
+        val content = contentService.post(
+            PostContentCommand(title = request.title,
+                               address = request.address,
+                               latitude = request.latitude,
+                               longitude = request.longitude,
+                               createdAt = request.createdAt)
+        )
         val response = PostContentResponse(contentId = content.id,
                                            userId = content.userId,
                                            title = content.title,
                                            address = content.address,
                                            longitude = content.point.y,
                                            latitude = content.point.x,
-                                           createdAt = content.createdAt)
+                                           createdAt = content.createdAt,
+                                           updatedAt = content.updatedAt)
         return SuccessResponse(responseData = response)
     }
 
@@ -111,7 +115,7 @@ class ContentController(
                                  address = request.address,
                                  latitude = request.latitude,
                                  longitude = request.longitude,
-                                 createdAt = request.createdAt)
+                                 updatedAt = request.updatedAt)
         )
         return SuccessResponse()
     }

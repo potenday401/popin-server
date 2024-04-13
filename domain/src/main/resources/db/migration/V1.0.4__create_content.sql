@@ -7,7 +7,8 @@ CREATE TABLE "popin"."content"
     title      TEXT        NOT NULL,
     address    TEXT        NOT NULL,
     point      GEOMETRY(Point,4326) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL
 );
 
 CREATE INDEX "content_user_id_idx" ON "popin"."content" (user_id);

@@ -61,7 +61,8 @@ class ContentService(
         return contentPersistenceAdapter.save(userId = userId,
                                               title = command.title,
                                               address = command.address,
-                                              point = point)
+                                              point = point,
+                                              createdAt = command.createdAt)
     }
 
     @Transactional
@@ -80,7 +81,7 @@ class ContentService(
             newPoint = geometryFactory.createPoint(coordinate)
         }
 
-        content.update(command.title, command.address, newPoint, command.createdAt)
+        content.update(command.title, command.address, newPoint, command.updatedAt)
         contentPersistenceAdapter.update(content)
     }
 

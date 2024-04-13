@@ -68,13 +68,13 @@ class PhotoController(
     @PutMapping("/{photoId}")
     fun putPhotos(
         @PathVariable("photoId") photoId: Long,
-        @RequestParam("createdAt") createdAt: LocalDateTime,
+        @RequestParam("updatedAt") updatedAt: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
         val photo = photoService.change(
             ChangePhotoCommand(photoId = photoId,
                                image = image,
-                               createdAt = createdAt)
+                               updatedAt = updatedAt)
         )
         val response = PutPhotoResponse(photoId = photo.id,
                                         contentId = photo.contentId,

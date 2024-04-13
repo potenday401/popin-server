@@ -30,7 +30,7 @@ class PhotoService(
         val oldUrl = photo.url
         val newUrl = s3Uploader.upload(command.image)
 
-        photo.change(newUrl, command.createdAt)
+        photo.change(newUrl, command.updatedAt)
         photoPersistenceAdapter.update(photo)
         s3Uploader.delete(oldUrl)
         return photo
