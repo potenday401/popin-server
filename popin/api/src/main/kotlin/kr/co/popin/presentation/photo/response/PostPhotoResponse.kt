@@ -6,5 +6,6 @@ data class PostPhotoResponse(
     val photoId: Long,
     val contentId: Long,
     val url: String,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

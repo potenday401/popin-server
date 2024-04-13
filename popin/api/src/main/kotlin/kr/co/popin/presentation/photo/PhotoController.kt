@@ -49,7 +49,8 @@ class PhotoController(
         val response = PostPhotoResponse(photoId = photo.id,
                                          contentId = photo.contentId,
                                          url = photo.url,
-                                         createdAt = photo.createdAt)
+                                         createdAt = photo.createdAt,
+                                         updatedAt = photo.updatedAt)
         return SuccessResponse(responseData = response)
     }
 
@@ -79,7 +80,8 @@ class PhotoController(
         val response = PutPhotoResponse(photoId = photo.id,
                                         contentId = photo.contentId,
                                         url = photo.url,
-                                        createdAt = photo.createdAt)
+                                        createdAt = photo.createdAt,
+                                        updatedAt = photo.updatedAt)
         return SuccessResponse(responseData = response)
     }
 
