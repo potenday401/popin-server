@@ -20,7 +20,7 @@ class PhotoService(
         val url = s3Uploader.upload(command.image)
         return photoPersistenceAdapter.save(contentId = command.contentId,
                                             url = url,
-                                            createdAt = command.createdAt)
+                                            memorizedAt = command.memorizedAt)
     }
 
     @Transactional
@@ -30,7 +30,7 @@ class PhotoService(
         val oldUrl = photo.url
         val newUrl = s3Uploader.upload(command.image)
 
-        photo.change(newUrl, command.updatedAt)
+        photo.change(newUrl, command.memorizedAt)
         photoPersistenceAdapter.update(photo)
         s3Uploader.delete(oldUrl)
         return photo

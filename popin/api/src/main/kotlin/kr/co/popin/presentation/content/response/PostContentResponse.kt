@@ -9,6 +9,5 @@ data class PostContentResponse(
     val address: String,
     val latitude: Double,
     val longitude: Double,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val memorizedAt: LocalDateTime,
 )

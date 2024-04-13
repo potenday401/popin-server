@@ -38,19 +38,18 @@ class PhotoController(
     @PostMapping
     fun postPhotos(
         @RequestParam("contentId") contentId: Long,
-        @RequestParam("createdAt") createdAt: LocalDateTime,
+        @RequestParam("memorizedAt") memorizedAt: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
         val photo = photoService.upload(
-            UploadPhotoCommand(contentId = contentId,
+            UploadPhotoCommand(contentId = 1,
                                image = image,
-                               createdAt = createdAt)
+                               memorizedAt = memorizedAt)
         )
         val response = PostPhotoResponse(photoId = photo.id,
                                          contentId = photo.contentId,
                                          url = photo.url,
-                                         createdAt = photo.createdAt,
-                                         updatedAt = photo.updatedAt)
+                                         memorizedAt = photo.memorizedAt)
         return SuccessResponse(responseData = response)
     }
 
@@ -69,19 +68,18 @@ class PhotoController(
     @PutMapping("/{photoId}")
     fun putPhotos(
         @PathVariable("photoId") photoId: Long,
-        @RequestParam("updatedAt") updatedAt: LocalDateTime,
+        @RequestParam("memorizedAt") memorizedAt: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
         val photo = photoService.change(
             ChangePhotoCommand(photoId = photoId,
                                image = image,
-                               updatedAt = updatedAt)
+                               memorizedAt = memorizedAt)
         )
         val response = PutPhotoResponse(photoId = photo.id,
                                         contentId = photo.contentId,
                                         url = photo.url,
-                                        createdAt = photo.createdAt,
-                                        updatedAt = photo.updatedAt)
+                                        memorizedAt = photo.memorizedAt)
         return SuccessResponse(responseData = response)
     }
 

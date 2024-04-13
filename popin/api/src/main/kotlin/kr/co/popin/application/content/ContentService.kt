@@ -48,7 +48,9 @@ class ContentService(
                              address = content.address,
                              point = content.point,
                              photos = photoMap.getOrDefault(content.id, emptyList()),
-                             createdAt = content.createdAt)
+                             memorizedAt = content.memorizedAt,
+                             createdAt = content.createdAt,
+                             updatedAt = content.memorizedAt)
         }
     }
 
@@ -62,7 +64,7 @@ class ContentService(
                                               title = command.title,
                                               address = command.address,
                                               point = point,
-                                              createdAt = command.createdAt)
+                                              memorizedAt = command.memorizedAt)
     }
 
     @Transactional
@@ -81,7 +83,7 @@ class ContentService(
             newPoint = geometryFactory.createPoint(coordinate)
         }
 
-        content.update(command.title, command.address, newPoint, command.updatedAt)
+        content.update(command.title, command.address, newPoint, command.memorizedAt)
         contentPersistenceAdapter.update(content)
     }
 

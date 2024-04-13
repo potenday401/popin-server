@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 data class ChangePhotoCommand(
     val photoId: Long,
     val image: MultipartFile,
-    val updatedAt: LocalDateTime
+    val memorizedAt: LocalDateTime
 )

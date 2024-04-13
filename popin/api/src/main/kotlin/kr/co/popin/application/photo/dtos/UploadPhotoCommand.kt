@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 data class UploadPhotoCommand(
     val contentId: Long,
     val image: MultipartFile,
-    val createdAt: LocalDateTime
+    val memorizedAt: LocalDateTime
 )

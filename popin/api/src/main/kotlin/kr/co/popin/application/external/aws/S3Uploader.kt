@@ -57,7 +57,7 @@ class S3Uploader(
 
         val deleteRequest = DeleteObjectRequest.builder()
             .bucket(s3Properties.bucketName)
-            .key(key)
+            .key(prefix + key)
             .build()
         s3Client.deleteObject(deleteRequest).whenComplete { _, exception ->
             if (exception != null) {

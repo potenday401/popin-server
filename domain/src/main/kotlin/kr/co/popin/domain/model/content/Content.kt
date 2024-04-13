@@ -9,15 +9,17 @@ data class Content(
     var title: String,
     var address: String,
     var point: Point,
+    var memorizedAt: LocalDateTime,
     val createdAt: LocalDateTime,
     var updatedAt: LocalDateTime,
 ) {
 
-    fun update(newTitle: String?, newAddress: String?, newPoint: Point?, newUpdatedAt: LocalDateTime?) {
+    fun update(newTitle: String?, newAddress: String?, newPoint: Point?, newMemorizedAt: LocalDateTime?) {
         this.title = newTitle ?: this.title
         this.address = newAddress ?: this.address
         this.point = newPoint ?: this.point
-        this.updatedAt = newUpdatedAt ?: this.updatedAt
+        this.memorizedAt = newMemorizedAt ?: this.memorizedAt
+        this.updatedAt = LocalDateTime.now()
     }
 
 }

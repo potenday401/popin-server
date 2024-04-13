@@ -54,7 +54,7 @@ class ContentController(
                                    latitude = it.point.y,
                                    longitude = it.point.x,
                                    photos = it.photos,
-                                   createdAt = it.createdAt)
+                                   memorizedAt = it.memorizedAt)
             }
         return SuccessResponse(responseData = contentResponse)
     }
@@ -79,7 +79,7 @@ class ContentController(
                                address = request.address,
                                latitude = request.latitude,
                                longitude = request.longitude,
-                               createdAt = request.createdAt)
+                               memorizedAt = request.memorizedAt)
         )
         val response = PostContentResponse(contentId = content.id,
                                            userId = content.userId,
@@ -87,8 +87,7 @@ class ContentController(
                                            address = content.address,
                                            longitude = content.point.y,
                                            latitude = content.point.x,
-                                           createdAt = content.createdAt,
-                                           updatedAt = content.updatedAt)
+                                           memorizedAt = content.memorizedAt)
         return SuccessResponse(responseData = response)
     }
 
@@ -115,7 +114,7 @@ class ContentController(
                                  address = request.address,
                                  latitude = request.latitude,
                                  longitude = request.longitude,
-                                 updatedAt = request.updatedAt)
+                                 memorizedAt = request.memorizedAt)
         )
         return SuccessResponse()
     }

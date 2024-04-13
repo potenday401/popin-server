@@ -7,5 +7,5 @@ data class PostContentCommand(
     val address: String,
     val latitude: Double,
     val longitude: Double,
-    val createdAt: LocalDateTime,
+    val memorizedAt: LocalDateTime,
 )

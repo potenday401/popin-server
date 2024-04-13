@@ -11,5 +11,7 @@ data class ContentWithPhoto(
     val address: String,
     val point: Point,
     val photos: List<Photo>,
-    val createdAt: LocalDateTime
+    val memorizedAt: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

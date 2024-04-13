@@ -7,5 +7,5 @@ data class PutContentRequest(
     val address: String?,
     val latitude: Double?,
     val longitude: Double?,
-    val updatedAt: LocalDateTime?,
+    val memorizedAt: LocalDateTime?,
 )

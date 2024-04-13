@@ -28,9 +28,17 @@ class ContentPersistenceAdapter(
     }
 
     @Transactional
-    fun save(userId: String, title: String, address: String, point: Point, createdAt: LocalDateTime): Content {
+    fun save(userId: String, title: String, address: String, point: Point, memorizedAt: LocalDateTime): Content {
         val id = contentRepository.generateId()
-        val contentEntity = ContentEntity(id, userId, title, address, point, createdAt, createdAt)
+        val now = LocalDateTime.now()
+        val contentEntity = ContentEntity(id = id,
+                                          userId = userId,
+                                          title = title,
+                                          address = address,
+                                          point = point,
+                                          memorizedAt = memorizedAt,
+                                          createdAt = now,
+                                          updatedAt = now)
         contentRepository.insert(contentEntity)
         return this.toDomain(contentEntity)
     }
@@ -53,6 +61,7 @@ class ContentPersistenceAdapter(
                        title = entity.title,
                        address = entity.address,
                        point = entity.point,
+                       memorizedAt = entity.memorizedAt,
                        createdAt = entity.createdAt,
                        updatedAt = entity.updatedAt)
     }
@@ -63,6 +72,7 @@ class ContentPersistenceAdapter(
                              title = domain.title,
                              address = domain.address,
                              point = domain.point,
+                             memorizedAt = domain.memorizedAt,
                              createdAt = domain.createdAt,
                              updatedAt = domain.updatedAt)
     }

@@ -10,7 +10,6 @@ import org.jooq.impl.DSL
 import org.locationtech.jts.geom.Point
 import org.locationtech.jts.io.WKTReader
 import org.springframework.stereotype.Repository
-import java.time.ZoneOffset
 
 @Repository
 class ContentJooqRepository(
@@ -56,6 +55,7 @@ class ContentJooqRepository(
                      CONTENT.TITLE,
                      CONTENT.ADDRESS,
                      DSL.field("point"),
+                     CONTENT.MEMORIZED_AT,
                      CONTENT.CREATED_AT,
                      CONTENT.UPDATED_AT)
             .values(entity.id,
@@ -63,8 +63,9 @@ class ContentJooqRepository(
                     entity.title,
                     entity.address,
                     DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)"),
-                    entity.createdAt.atOffset(ZoneOffset.UTC),
-                    entity.updatedAt.atOffset(ZoneOffset.UTC))
+                    entity.memorizedAt,
+                    entity.createdAt,
+                    entity.updatedAt)
             .execute()
     }
 
@@ -73,7 +74,8 @@ class ContentJooqRepository(
             .set(CONTENT.TITLE, entity.title)
             .set(CONTENT.ADDRESS, entity.address)
             .set(DSL.field("point"), DSL.field("ST_GeomFromText('${entity.point.toText()}', 4326)") as Any)
-            .set(CONTENT.UPDATED_AT, entity.updatedAt.atOffset(ZoneOffset.UTC))
+            .set(CONTENT.MEMORIZED_AT, entity.memorizedAt)
+            .set(CONTENT.UPDATED_AT, entity.updatedAt)
             .where(CONTENT.ID.eq(entity.id))
             .execute()
     }
@@ -89,8 +91,9 @@ class ContentJooqRepository(
             title = record.title ?: throw IllegalArgumentException(),
             address = record.address ?: throw IllegalArgumentException(),
             point = point,
-            createdAt = record.createdAt?.toLocalDateTime() ?: throw IllegalArgumentException(),
-            updatedAt = record.updatedAt?.toLocalDateTime() ?: throw IllegalArgumentException(),
+            memorizedAt = record.memorizedAt ?: throw IllegalArgumentException(),
+            createdAt = record.createdAt ?: throw IllegalArgumentException(),
+            updatedAt = record.updatedAt ?: throw IllegalArgumentException(),
         )
     }
 

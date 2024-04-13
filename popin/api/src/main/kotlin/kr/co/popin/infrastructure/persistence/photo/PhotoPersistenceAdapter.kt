@@ -25,9 +25,10 @@ class PhotoPersistenceAdapter(
     }
 
     @Transactional
-    fun save(contentId: Long, url: String, createdAt: LocalDateTime): Photo {
+    fun save(contentId: Long, url: String, memorizedAt: LocalDateTime): Photo {
         val id = photoRepository.generateId()
-        val photoEntity = PhotoEntity(id, contentId, url, createdAt, createdAt)
+        val now = LocalDateTime.now()
+        val photoEntity = PhotoEntity(id, contentId, url, memorizedAt, now, now)
         photoRepository.insert(photoEntity)
         return this.toDomain(photoEntity)
     }
@@ -48,6 +49,7 @@ class PhotoPersistenceAdapter(
         return Photo(entity.id,
                      entity.contentId,
                      entity.url,
+                     entity.memorizedAt,
                      entity.createdAt,
                      entity.updatedAt)
     }
@@ -56,6 +58,7 @@ class PhotoPersistenceAdapter(
         return PhotoEntity(domain.id,
                            domain.contentId,
                            domain.url,
+                           domain.memorizedAt,
                            domain.createdAt,
                            domain.updatedAt)
     }

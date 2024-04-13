@@ -11,5 +11,5 @@ data class GetContentResponse(
     val latitude: Double,
     val longitude: Double,
     val photos: List<Photo>,
-    val createdAt: LocalDateTime
+    val memorizedAt: LocalDateTime
 )
