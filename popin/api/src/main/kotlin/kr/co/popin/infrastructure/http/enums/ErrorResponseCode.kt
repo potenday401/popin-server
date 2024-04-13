@@ -13,7 +13,8 @@ enum class ErrorResponseCode (
     INVALID_EMAIL(4, HttpStatus.BAD_REQUEST.value(), "이메일이 잘못 되었습니다."),
     INVALID_PASSWORD(5, HttpStatus.BAD_REQUEST.value(), "비밀번호가 잘못 되었습니다."),
     DUPLICATE_USER(6, HttpStatus.BAD_REQUEST.value(), "유저가 이미 존재합니다."),
-    BAD_REQUEST(7, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 요청입니다.")
+    BAD_REQUEST(7, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 요청입니다."),
+    NOT_FOUND_RESOURCE(8, HttpStatus.NOT_FOUND.value(), "찾을 수 없는 데이터입니다."),
     ;
 
     override fun getCodePrefix(): String {

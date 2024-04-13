@@ -28,6 +28,8 @@ val `spring-boot-starter-security`
 
 val `spring-boot-starter-jooq`
     get() = "org.springframework.boot:spring-boot-starter-jooq"
+val `jooq-meta-extensions`
+    get() = "org.jooq:jooq-meta-extensions"
 
 fun `netty-dns-macos`(
     version: String = Versions.NETTY_DNS_MACOS,
@@ -40,6 +42,8 @@ fun `uuid-generator`(
 
 fun `postgres-connector`(version: String = Versions.POSTGRES) =
     "org.postgresql:postgresql:${version}"
+
+fun `postgis-jdbc`(version: String = "2023.1.0") = "net.postgis:postgis-jdbc:$version"
 
 fun `testcontainer-postgres`(version: String = Versions.TESTCONTAINER) =
     "org.testcontainers:postgresql:${version}"

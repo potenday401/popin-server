@@ -1,9 +1,12 @@
 package kr.co.popin.application.external.aws
 
 import kr.co.popin.infrastructure.config.aws.credential.property.AmazonS3Properties
+import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
+import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.services.s3.S3AsyncClient
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest
 import software.amazon.awssdk.transfer.s3.S3TransferManager
 import software.amazon.awssdk.transfer.s3.model.UploadFileRequest
 import software.amazon.awssdk.transfer.s3.progress.LoggingTransferListener
@@ -34,14 +37,33 @@ class S3Uploader(
             .source(file)
             .build()
 
-        val uploadResult = transferManager.uploadFile(request)
+        transferManager.uploadFile(request)
             .completionFuture()
-            .join()
-            .response()
-        uploadResult.ssekmsKeyId()
+            .whenComplete { _, exception ->
+                if (exception != null) {
+                    throw SdkClientException.create(ErrorResponseCode.ACCESS_DENIED.getRealCode())
+                }
+            }.join()
 
         val url = s3Client.utilities().getUrl { it.bucket(bucketName).key(key) }
         return url.toString()
+    }
+
+    fun delete(url: String) {
+        val prefix = s3Properties.folderPath + "/"
+        val startIndex = url.indexOf(prefix) + prefix.length
+        val endIndex = url.indexOf('.', startIndex)
+        val key = url.substring(startIndex, endIndex + 4)
+
+        val deleteRequest = DeleteObjectRequest.builder()
+            .bucket(s3Properties.bucketName)
+            .key(prefix + key)
+            .build()
+        s3Client.deleteObject(deleteRequest).whenComplete { _, exception ->
+            if (exception != null) {
+                throw SdkClientException.create(ErrorResponseCode.ACCESS_DENIED.getRealCode())
+            }
+        }.join()
     }
 
 }

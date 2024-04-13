@@ -12,26 +12,55 @@ class PhotoPersistenceAdapter(
     private val photoRepository: PhotoJooqRepository
 ) {
 
+    @Transactional(readOnly = true)
+    fun getById(photoId: Long): Photo? {
+        val photoEntity = photoRepository.findById(photoId) ?: return null
+        return this.toDomain(photoEntity)
+    }
+
+    @Transactional(readOnly = true)
+    fun getByContentIds(contentIds: Collection<Long>): List<Photo> {
+        return photoRepository.findAllByContentIds(contentIds)
+            .map { this.toDomain(it) }
+    }
+
     @Transactional
-    fun save(contentId: Long, url: String, createdDateTime: LocalDateTime): Photo {
+    fun save(contentId: Long, url: String, memorizedAt: LocalDateTime): Photo {
         val id = photoRepository.generateId()
-        val photoEntity = PhotoEntity(id, contentId, url, createdDateTime)
+        val now = LocalDateTime.now()
+        val photoEntity = PhotoEntity(id, contentId, url, memorizedAt, now, now)
         photoRepository.insert(photoEntity)
         return this.toDomain(photoEntity)
+    }
+
+    @Transactional
+    fun update(photo: Photo) {
+        val photoEntity = this.toPersistenceEntity(photo)
+        photoRepository.update(photoEntity)
+    }
+
+    @Transactional
+    fun delete(photo: Photo) {
+        val photoEntity = this.toPersistenceEntity(photo)
+        photoRepository.delete(photoEntity)
     }
 
     private fun toDomain(entity: PhotoEntity): Photo {
         return Photo(entity.id,
                      entity.contentId,
                      entity.url,
-                     entity.createdAt)
+                     entity.memorizedAt,
+                     entity.createdAt,
+                     entity.updatedAt)
     }
 
     private fun toPersistenceEntity(domain: Photo): PhotoEntity {
         return PhotoEntity(domain.id,
                            domain.contentId,
                            domain.url,
-                           domain.createdAt)
+                           domain.memorizedAt,
+                           domain.createdAt,
+                           domain.updatedAt)
     }
 
 }

@@ -2,7 +2,7 @@ package kr.co.popin.presentation.photo.response
 
 import java.time.LocalDateTime
 
-data class PostPhotoResponse(
+data class PutPhotoResponse(
     val photoId: Long,
     val contentId: Long,
     val url: String,
