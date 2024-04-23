@@ -13,6 +13,7 @@ import kr.co.popin.infrastructure.http.enums.SuccessResponseCode
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.photo.response.PostPhotoResponse
 import kr.co.popin.presentation.photo.response.PutPhotoResponse
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -35,14 +36,14 @@ class PhotoController(
         ]
     )
     @Operation(summary = "사진 업로드")
-    @PostMapping
+    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun postPhotos(
         @RequestParam("contentId") contentId: Long,
         @RequestParam("memorizedAt") memorizedAt: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
         val photo = photoService.upload(
-            UploadPhotoCommand(contentId = 1,
+            UploadPhotoCommand(contentId = contentId,
                                image = image,
                                memorizedAt = memorizedAt)
         )
