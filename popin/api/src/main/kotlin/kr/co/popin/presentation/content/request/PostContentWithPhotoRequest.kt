@@ -1,6 +1,7 @@
 package kr.co.popin.presentation.content.request
 
 import io.swagger.v3.oas.annotations.media.Schema
+import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
 class PostContentWithPhotoRequest(
@@ -12,6 +13,8 @@ class PostContentWithPhotoRequest(
     val latitude: Double,
     @field:Schema(description = "경도", type = "double", example = "127.56789")
     val longitude: Double,
-    @field:Schema(description = "등록 일시", example = "2024-04-27T15:30:00")
+    @field:Schema(description = "등록 일시", type = "string", example = "2024-04-27T10:00:00")
     val memorizedAt: LocalDateTime,
+    @field:Schema(description = "사진 목록")
+    val photos: List<MultipartFile>,
 )

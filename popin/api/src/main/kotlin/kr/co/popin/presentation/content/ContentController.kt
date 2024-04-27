@@ -2,6 +2,8 @@ package kr.co.popin.presentation.content
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.content.ContentService
 import kr.co.popin.application.content.dtos.GetContentQuery
@@ -19,10 +21,8 @@ import kr.co.popin.presentation.content.request.PostContentWithPhotoRequest
 import kr.co.popin.presentation.content.request.PutContentRequest
 import kr.co.popin.presentation.content.response.GetContentResponse
 import kr.co.popin.presentation.content.response.PostContentResponse
-import org.springdoc.core.annotations.ParameterObject
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @Tag(name = "Content")
 @RequestMapping("/contents")
@@ -155,11 +155,17 @@ class ContentController(
             ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
         ]
     )
-    @Operation(summary = "컨텐츠 등록 (사진 포함)")
+    @Operation(summary = "컨텐츠 등록 (사진 포함)",
+               requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
+                   content = [Content(
+                       mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                       schema = Schema(implementation = PostContentWithPhotoRequest::class)
+                   )]
+               )
+    )
     @PostMapping("/with", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun postContentsWithPhotos(
-        @ParameterObject @ModelAttribute request: PostContentWithPhotoRequest,
-        @RequestPart photos: List<MultipartFile>
+        @ModelAttribute request: PostContentWithPhotoRequest
     ): SuccessResponse {
         val contentWithPhoto = contentService.postWithPhoto(
             PostContentWithPhotoCommand(title = request.title,
@@ -167,7 +173,7 @@ class ContentController(
                                         latitude = request.latitude,
                                         longitude = request.longitude,
                                         memorizedAt = request.memorizedAt,
-                                        photos = photos)
+                                        photos = request.photos)
         )
         val response = GetContentResponse(contentId = contentWithPhoto.contentId,
                                           userId = contentWithPhoto.userId,
