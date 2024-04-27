@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.content.ContentService
 import kr.co.popin.application.content.dtos.GetContentQuery
 import kr.co.popin.application.content.dtos.PostContentCommand
+import kr.co.popin.application.content.dtos.PostContentWithPhotoCommand
 import kr.co.popin.application.content.dtos.UpdateContentCommand
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
@@ -14,10 +15,14 @@ import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.http.enums.SuccessResponseCode
 import kr.co.popin.infrastructure.http.response.SuccessResponse
 import kr.co.popin.presentation.content.request.PostContentRequest
+import kr.co.popin.presentation.content.request.PostContentWithPhotoRequest
 import kr.co.popin.presentation.content.request.PutContentRequest
 import kr.co.popin.presentation.content.response.GetContentResponse
 import kr.co.popin.presentation.content.response.PostContentResponse
+import org.springdoc.core.annotations.ParameterObject
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @Tag(name = "Content")
 @RequestMapping("/contents")
@@ -138,5 +143,42 @@ class ContentController(
         contentService.delete(contentId)
         return SuccessResponse()
     }
+
+
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.ACCESS_DENIED),
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST)
+        ]
+    )
+    @Operation(summary = "컨텐츠 등록 (사진 포함)")
+    @PostMapping("/with", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun postContentsWithPhotos(
+        @ParameterObject @ModelAttribute request: PostContentWithPhotoRequest,
+        @RequestPart photos: List<MultipartFile>
+    ): SuccessResponse {
+        val contentWithPhoto = contentService.postWithPhoto(
+            PostContentWithPhotoCommand(title = request.title,
+                                        address = request.address,
+                                        latitude = request.latitude,
+                                        longitude = request.longitude,
+                                        memorizedAt = request.memorizedAt,
+                                        photos = photos)
+        )
+        val response = GetContentResponse(contentId = contentWithPhoto.contentId,
+                                          userId = contentWithPhoto.userId,
+                                          title = contentWithPhoto.title,
+                                          address = contentWithPhoto.address,
+                                          latitude = contentWithPhoto.point.x,
+                                          longitude = contentWithPhoto.point.y,
+                                          photos = contentWithPhoto.photos,
+                                          memorizedAt = contentWithPhoto.memorizedAt)
+        return SuccessResponse(responseData = response)
+    }
+
 
 }
