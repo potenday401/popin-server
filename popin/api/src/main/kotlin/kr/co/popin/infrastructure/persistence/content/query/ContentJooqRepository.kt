@@ -41,8 +41,10 @@ class ContentJooqRepository(
     }
 
     fun findByQueryCondition(condition: ContentQueryCondition): List<ContentEntity> {
+        val contains = DSL.condition("ST_Contains(ST_GeomFromText('${condition.area.toText()}', 4326), point)")
         return dslContext.selectFrom(CONTENT)
-            .where(CONTENT.USER_ID.eq(condition.userId))
+            .where(CONTENT.USER_ID.eq(condition.userId),
+                   contains)
             .fetch()
             .map { this.toEntity(it) }
     }

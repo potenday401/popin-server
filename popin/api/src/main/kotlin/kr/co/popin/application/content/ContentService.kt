@@ -1,15 +1,12 @@
 package kr.co.popin.application.content
 
 import kr.co.popin.application.auth.AuthService
-import kr.co.popin.application.content.dtos.ContentWithPhoto
-import kr.co.popin.application.content.dtos.GetContentQuery
-import kr.co.popin.application.content.dtos.PostContentCommand
-import kr.co.popin.application.content.dtos.UpdateContentCommand
+import kr.co.popin.application.content.dtos.*
+import kr.co.popin.application.photo.PhotoService
 import kr.co.popin.domain.model.content.Content
 import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.persistence.content.ContentPersistenceAdapter
 import kr.co.popin.infrastructure.persistence.content.query.ContentQueryCondition
-import kr.co.popin.infrastructure.persistence.photo.PhotoPersistenceAdapter
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
@@ -21,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ContentService(
     private val authService: AuthService,
+    private val photoService: PhotoService,
     private val contentPersistenceAdapter: ContentPersistenceAdapter,
-    private val photoPersistenceAdapter: PhotoPersistenceAdapter,
     private val geometryFactory: GeometryFactory
 ) {
 
@@ -38,7 +35,7 @@ class ContentService(
         val condition = ContentQueryCondition(userId = userId, area = area)
         val contents: List<Content> = contentPersistenceAdapter.getByQueryCondition(condition)
         val contentIds = contents.map { it.id }
-        val photoMap = photoPersistenceAdapter.getByContentIds(contentIds)
+        val photoMap = photoService.getByContentIds(contentIds)
             .groupBy { it.contentId }
 
         return contents.map { content ->
@@ -65,6 +62,31 @@ class ContentService(
                                               address = command.address,
                                               point = point,
                                               memorizedAt = command.memorizedAt)
+    }
+
+    @Transactional
+    fun postWithPhoto(command: PostContentWithPhotoCommand): ContentWithPhoto {
+        // TODO: MethodArgumentResolver 이용해 컨트롤러단에서 바로 userId 생성 예정
+        val userId = authService.getUserIdByAccessToken()
+        val coordinate = Coordinate(command.longitude, command.latitude)
+        val point = geometryFactory.createPoint(coordinate)
+
+        val content = contentPersistenceAdapter.save(userId = userId,
+                                                     title = command.title,
+                                                     address = command.address,
+                                                     point = point,
+                                                     memorizedAt = command.memorizedAt)
+        val photos = command.photos.map { photoService.upload(content.id, it) }
+
+        return ContentWithPhoto(contentId = content.id,
+                                userId = content.userId,
+                                title = content.title,
+                                address = content.address,
+                                point = content.point,
+                                photos = photos,
+                                memorizedAt = content.memorizedAt,
+                                createdAt = content.createdAt,
+                                updatedAt = content.memorizedAt)
     }
 
     @Transactional

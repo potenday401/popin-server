@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.photo.PhotoService
 import kr.co.popin.application.photo.dtos.ChangePhotoCommand
-import kr.co.popin.application.photo.dtos.UploadPhotoCommand
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiSuccessResponseCode
@@ -42,11 +41,7 @@ class PhotoController(
         @RequestParam("memorizedAt") memorizedAt: LocalDateTime,
         @RequestPart("image-file") image: MultipartFile
     ): SuccessResponse {
-        val photo = photoService.upload(
-            UploadPhotoCommand(contentId = contentId,
-                               image = image,
-                               memorizedAt = memorizedAt)
-        )
+        val photo = photoService.upload(contentId, image)
         val response = PostPhotoResponse(photoId = photo.id,
                                          contentId = photo.contentId,
                                          url = photo.url,
