@@ -46,7 +46,17 @@ class UserController (
             password = request.password
         )
 
-        return SuccessResponse()
+        val result = userService.login(
+            email = request.email,
+            password = request.password
+        )
+
+        return SuccessResponse(
+            responseData = UserLoginResponse(
+                accessToken = result.accessToken,
+                refreshToken = result.refreshToken
+            )
+        )
     }
 
     @ApiResponseCodes(
