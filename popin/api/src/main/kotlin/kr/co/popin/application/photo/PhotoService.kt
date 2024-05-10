@@ -2,12 +2,13 @@ package kr.co.popin.application.photo
 
 import kr.co.popin.application.external.aws.S3Uploader
 import kr.co.popin.application.photo.dtos.ChangePhotoCommand
-import kr.co.popin.application.photo.dtos.UploadPhotoCommand
 import kr.co.popin.domain.model.photo.Photo
 import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import kr.co.popin.infrastructure.persistence.photo.PhotoPersistenceAdapter
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDateTime
 
 @Service
 class PhotoService(
@@ -15,12 +16,17 @@ class PhotoService(
     private val s3Uploader: S3Uploader
 ) {
 
+    @Transactional(readOnly = true)
+    fun getByContentIds(contentIds: List<Long>): List<Photo> {
+        return photoPersistenceAdapter.getByContentIds(contentIds)
+    }
+
     @Transactional
-    fun upload(command: UploadPhotoCommand): Photo {
-        val url = s3Uploader.upload(command.image)
-        return photoPersistenceAdapter.save(contentId = command.contentId,
+    fun upload(contentId: Long, image: MultipartFile): Photo {
+        val url = s3Uploader.upload(image)
+        return photoPersistenceAdapter.save(contentId = contentId,
                                             url = url,
-                                            memorizedAt = command.memorizedAt)
+                                            memorizedAt = LocalDateTime.now())
     }
 
     @Transactional
