@@ -1,5 +1,6 @@
 package kr.co.popin.infrastructure.persistence.user
 
+import kr.co.popin.application.exceptions.NotFoundUserException
 import kr.co.popin.domain.model.user.aggregate.User
 import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.infrastructure.persistence.user.mapper.UserMapper
@@ -17,7 +18,17 @@ class UserPersistenceAdapter (
         userRepository.insert(userEntity)
 
         val savedUser = userRepository.findById(userEntity.id)
-            ?: throw IllegalArgumentException("test")
+            ?: throw NotFoundUserException()
+
+        return UserMapper.mapToDomainEntity(savedUser)
+    }
+
+    override fun update(user: User): User {
+        val userEntity = UserMapper.mapToPersistenceEntity(user)
+        userRepository.update(userEntity)
+
+        val savedUser = userRepository.findById(userEntity.id)
+            ?: throw NotFoundUserException()
 
         return UserMapper.mapToDomainEntity(savedUser)
     }

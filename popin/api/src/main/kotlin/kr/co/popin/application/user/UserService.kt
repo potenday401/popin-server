@@ -3,6 +3,7 @@ package kr.co.popin.application.user
 import kr.co.popin.application.auth.AuthService
 import kr.co.popin.application.auth.dtos.EmailAuthCodeInfo
 import kr.co.popin.application.exceptions.NotFoundConfirmCodeException
+import kr.co.popin.application.exceptions.NotFoundUserException
 import kr.co.popin.application.exceptions.UserExistsException
 import kr.co.popin.application.external.aws.MailSender
 import kr.co.popin.application.external.aws.dtos.Mail
@@ -13,6 +14,7 @@ import kr.co.popin.domain.model.auth.enums.AuthTokenType
 import kr.co.popin.domain.model.user.aggregate.User
 import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.domain.model.user.vo.UserEmail
+import kr.co.popin.domain.model.user.vo.UserId
 import kr.co.popin.domain.model.user.vo.UserPassword
 import kr.co.popin.infrastructure.http.enums.ErrorResponseCode
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -112,6 +114,33 @@ class UserService (
         return authService.expireEmailAuthCode(lastNotExpiredAuthCode)
     }
 
+    // TODO 리팩토링 필요
+    @Transactional
+    fun changePassword(
+        aUserId: String,
+        aCurrentPassword: String,
+        aChangePassword: String
+    ) {
+        val userId = UserId(aUserId)
+        val user = userPersistenceAdapter.findById(userId)
+            ?: throw NotFoundUserException()
+
+        val currentPassword = UserPassword(aCurrentPassword)
+        if (!matchesPassword(currentPassword, user.password)) {
+            throw IllegalArgumentException(ErrorResponseCode.INVALID_PASSWORD.getRealCode())
+        }
+
+        val changePassword = UserPassword(aChangePassword)
+
+        validatePassword(changePassword)
+
+        val hashedChangePassword = hashPassword(changePassword)
+
+        val passwordChangedUser = user.changePassword(hashedChangePassword)
+        userPersistenceAdapter.update(passwordChangedUser)
+        // TODO 기존 비밀번호와 동일한 케이스 처리 필요
+    }
+
     private fun hashPassword(userPassword: UserPassword): UserPassword {
         val encodedPassword = passwordEncoder.encode(userPassword.password)
 
@@ -129,6 +158,14 @@ class UserService (
             throw IllegalArgumentException(ErrorResponseCode.INVALID_PASSWORD.getRealCode())
         }
     }
+
+    private fun matchesPassword(
+        rawPassword: UserPassword,
+        hashedPassword: UserPassword
+    ) = passwordEncoder.matches(
+        rawPassword.password,
+        hashedPassword.password
+    )
 
     private fun userExistsCheck(userEmail: UserEmail) {
         val userEntity = userPersistenceAdapter.findByEmail(userEmail)
