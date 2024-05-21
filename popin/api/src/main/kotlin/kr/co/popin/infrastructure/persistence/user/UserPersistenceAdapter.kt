@@ -4,6 +4,7 @@ import kr.co.popin.domain.model.user.aggregate.User
 import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.infrastructure.persistence.user.mapper.UserMapper
 import kr.co.popin.domain.model.user.vo.UserEmail
+import kr.co.popin.domain.model.user.vo.UserId
 import kr.co.popin.infrastructure.persistence.user.query.IUserRepository
 import org.springframework.stereotype.Component
 
@@ -29,6 +30,13 @@ class UserPersistenceAdapter (
 
     override fun findByEmail(userEmail: UserEmail): User? {
         val userEntity = userRepository.findByEmail(userEmail.email)
+            ?: return null
+
+        return UserMapper.mapToDomainEntity(userEntity)
+    }
+
+    override fun findById(userId: UserId): User? {
+        val userEntity = userRepository.findById(userId.id)
             ?: return null
 
         return UserMapper.mapToDomainEntity(userEntity)
