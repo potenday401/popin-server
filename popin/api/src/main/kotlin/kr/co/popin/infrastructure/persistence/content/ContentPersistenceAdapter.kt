@@ -1,6 +1,7 @@
 package kr.co.popin.infrastructure.persistence.content
 
 import kr.co.popin.domain.model.content.Content
+import kr.co.popin.domain.model.user.vo.UserId
 import kr.co.popin.infrastructure.persistence.content.entity.ContentEntity
 import kr.co.popin.infrastructure.persistence.content.query.ContentJooqRepository
 import kr.co.popin.infrastructure.persistence.content.query.ContentQueryCondition
@@ -19,6 +20,11 @@ class ContentPersistenceAdapter(
     fun getById(contentId: Long): Content? {
         val contentEntity = contentRepository.findById(contentId) ?: return null
         return this.toDomain(contentEntity)
+    }
+
+    @Transactional(readOnly = true)
+    fun findContentIdByUserId(userId: UserId): List<Long> {
+        return contentRepository.findContentIdByUserId(userId.id)
     }
 
     @Transactional(readOnly = true)
@@ -53,6 +59,11 @@ class ContentPersistenceAdapter(
     fun delete(content: Content) {
         val contentEntity = this.toPersistenceEntity(content)
         contentRepository.delete(contentEntity)
+    }
+
+    @Transactional
+    fun deleteAllByUserId(userId: UserId) {
+        contentRepository.deleteAllByUserId(userId.id)
     }
 
     private fun toDomain(entity: ContentEntity): Content {

@@ -40,6 +40,14 @@ class ContentJooqRepository(
             ?.let { this.toEntity(it) }
     }
 
+    fun findContentIdByUserId(userId: String): List<Long> {
+        return dslContext
+            .select(CONTENT.ID)
+            .from(CONTENT)
+            .where(CONTENT.USER_ID.eq(userId))
+            .fetchInto(Long::class.java)
+    }
+
     fun findByQueryCondition(condition: ContentQueryCondition): List<ContentEntity> {
         val contains = DSL.condition("ST_Contains(ST_GeomFromText('${condition.area.toText()}', 4326), point)")
         return dslContext.selectFrom(CONTENT)
@@ -79,6 +87,13 @@ class ContentJooqRepository(
             .set(CONTENT.MEMORIZED_AT, entity.memorizedAt)
             .set(CONTENT.UPDATED_AT, entity.updatedAt)
             .where(CONTENT.ID.eq(entity.id))
+            .execute()
+    }
+
+    fun deleteAllByUserId(userId: String) {
+        dslContext
+            .delete(CONTENT)
+            .where(CONTENT.USER_ID.eq(userId))
             .execute()
     }
 
