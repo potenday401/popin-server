@@ -25,7 +25,7 @@ class WithdrawalUserService (
 
         authTokenPersistenceAdapter.deleteAllByUserId(user.id)
 
-        val contentIds = contentPersistenceAdapter.findContentIdByUserId(user.id)
+        val contentIds = contentPersistenceAdapter.findIdsByUserId(user.id)
         photoPersistenceAdapter.deleteAllByContentIdIn(contentIds)
 
         contentPersistenceAdapter.deleteAllByUserId(user.id)
