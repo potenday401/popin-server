@@ -25,6 +25,10 @@ class UserPersistenceAdapter (
 
     override fun update(user: User): User {
         val userEntity = UserMapper.mapToPersistenceEntity(user)
+
+        userRepository.findById(userEntity.id)
+            ?: throw NotFoundUserException()
+
         userRepository.update(userEntity)
 
         val savedUser = userRepository.findById(userEntity.id)
