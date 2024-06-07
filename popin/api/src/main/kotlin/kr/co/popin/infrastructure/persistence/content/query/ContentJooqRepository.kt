@@ -40,7 +40,7 @@ class ContentJooqRepository(
             ?.let { this.toEntity(it) }
     }
 
-    fun findContentIdByUserId(userId: String): List<Long> {
+    fun findIdsByUserId(userId: String): List<Long> {
         return dslContext
             .select(CONTENT.ID)
             .from(CONTENT)

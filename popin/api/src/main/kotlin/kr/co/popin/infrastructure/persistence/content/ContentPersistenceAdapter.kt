@@ -23,8 +23,8 @@ class ContentPersistenceAdapter(
     }
 
     @Transactional(readOnly = true)
-    fun findContentIdByUserId(userId: UserId): List<Long> {
-        return contentRepository.findContentIdByUserId(userId.id)
+    fun findIdsByUserId(userId: UserId): List<Long> {
+        return contentRepository.findIdsByUserId(userId.id)
     }
 
     @Transactional(readOnly = true)
