@@ -45,6 +45,11 @@ class PhotoPersistenceAdapter(
         photoRepository.delete(photoEntity)
     }
 
+    @Transactional
+    fun deleteAllByContentIdIn(contentIds: List<Long>) {
+        photoRepository.deleteAllByContentIdIn(contentIds)
+    }
+
     private fun toDomain(entity: PhotoEntity): Photo {
         return Photo(entity.id,
                      entity.contentId,

@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.co.popin.application.auth.AuthService
+import kr.co.popin.application.exceptions.NotFoundAuthTokenException
 import kr.co.popin.application.user.UserService
+import kr.co.popin.application.user.WithdrawalUserService
+import kr.co.popin.base.AuthenticationBaseController
 import kr.co.popin.domain.model.auth.aggregate.AuthToken.Companion.REFRESH_TOKEN_COOKIE_KEY
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiErrorResponseCode
 import kr.co.popin.infrastructure.config.docs.springdoc.annotations.ApiResponseCodes
@@ -24,8 +27,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/users")
 class UserController (
     private val userService: UserService,
-    private val authService: AuthService
-) {
+    private val authService: AuthService,
+    private val withdrawalUserService: WithdrawalUserService
+): AuthenticationBaseController() {
     @ApiResponseCodes(
         success = [
             ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
@@ -57,6 +61,26 @@ class UserController (
                 refreshToken = result.refreshToken
             )
         )
+    }
+
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED)
+        ]
+    )
+    @Operation(summary = "회원 탈퇴")
+    @PostMapping("/withdrawal")
+    fun withdrawalUser(): SuccessResponse {
+        val user = getCurrentLoggedUserPrincipal()
+            ?: throw NotFoundAuthTokenException()
+
+        withdrawalUserService.withdrawal(user.getUserId())
+
+        return SuccessResponse()
     }
 
     @ApiResponseCodes(
@@ -240,6 +264,34 @@ class UserController (
                 toDaySendCount = result.toDaySendCount
             )
         )
+    }
+
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
+        ]
+    )
+    @Operation(summary = "비밀번호 변경")
+    @PutMapping("/change/password")
+    fun changePassword(
+        @RequestBody request: UserPasswordChangeRequest
+    ): SuccessResponse {
+        val user = getCurrentLoggedUserPrincipal()
+            ?: throw NotFoundAuthTokenException()
+
+        userService.changePassword(
+            aUserId = user.getUserId(),
+            aCurrentPassword = request.currentPassword,
+            aChangePassword = request.changePassword
+        )
+
+        // TODO 비밀번호 변경 후 로그아웃 되어야 하는지 확인 필요
+        return SuccessResponse()
     }
 
 }

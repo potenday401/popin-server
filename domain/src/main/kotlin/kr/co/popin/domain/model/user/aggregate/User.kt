@@ -11,6 +11,8 @@ data class User (
     val password: UserPassword,
     val registerAt: LocalDateTime
 ) : Serializable {
+    fun changePassword(hashedPassword: UserPassword): User =
+        this.copy(password = hashedPassword)
 
     companion object {
         private const val serialVersionUID = 1L

@@ -36,4 +36,11 @@ class PhotoJooqRepository(
             .fetchInto(PhotoEntity::class.java)
     }
 
+    fun deleteAllByContentIdIn(contentIds: List<Long>) {
+        dslContext
+            .delete(PHOTO)
+            .where(PHOTO.CONTENT_ID.`in`(contentIds))
+            .execute()
+    }
+
 }
