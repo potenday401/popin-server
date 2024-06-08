@@ -53,6 +53,13 @@ class UserService (
         validateEmail(userEmail)
         validatePassword(userPassword)
 
+        val user = userPersistenceAdapter.findByEmail(userEmail)
+            ?: throw NotFoundUserException()
+
+        if (!matchesPassword(userPassword, user.password)) {
+            throw IllegalArgumentException(ErrorResponseCode.NOT_MATCHED_PASSWORD.getRealCode())
+        }
+
         return authService.createNewAuthentication(
             email = email,
             password = password
@@ -127,7 +134,7 @@ class UserService (
 
         val currentPassword = UserPassword(aCurrentPassword)
         if (!matchesPassword(currentPassword, user.password)) {
-            throw IllegalArgumentException(ErrorResponseCode.INVALID_PASSWORD.getRealCode())
+            throw IllegalArgumentException(ErrorResponseCode.NOT_MATCHED_PASSWORD.getRealCode())
         }
 
         val changePassword = UserPassword(aChangePassword)
