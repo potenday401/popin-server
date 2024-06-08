@@ -15,6 +15,7 @@ enum class ErrorResponseCode (
     DUPLICATE_USER(6, HttpStatus.BAD_REQUEST.value(), "유저가 이미 존재합니다."),
     BAD_REQUEST(7, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 요청입니다."),
     NOT_FOUND_RESOURCE(8, HttpStatus.NOT_FOUND.value(), "찾을 수 없는 데이터입니다."),
+    DUPLICATE_PASSWORD(9, HttpStatus.BAD_REQUEST.value(), "동일한 비밀번호로 변경할 수 없습니다.")
     ;
 
     override fun getCodePrefix(): String {

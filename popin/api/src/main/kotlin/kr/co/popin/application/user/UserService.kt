@@ -134,11 +134,14 @@ class UserService (
 
         validatePassword(changePassword)
 
+        if (matchesPassword(currentPassword, changePassword)) {
+            throw IllegalArgumentException(ErrorResponseCode.DUPLICATE_PASSWORD.getRealCode())
+        }
+
         val hashedChangePassword = hashPassword(changePassword)
 
         val passwordChangedUser = user.changePassword(hashedChangePassword)
         userPersistenceAdapter.update(passwordChangedUser)
-        // TODO 기존 비밀번호와 동일한 케이스 처리 필요
     }
 
     private fun hashPassword(userPassword: UserPassword): UserPassword {

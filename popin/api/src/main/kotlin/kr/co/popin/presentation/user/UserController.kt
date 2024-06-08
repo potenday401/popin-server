@@ -273,7 +273,8 @@ class UserController (
         error = [
             ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
             ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
-            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_PASSWORD)
         ]
     )
     @Operation(summary = "비밀번호 변경")
