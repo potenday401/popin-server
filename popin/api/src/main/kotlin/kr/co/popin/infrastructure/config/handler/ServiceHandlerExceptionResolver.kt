@@ -29,11 +29,19 @@ class ServiceHandlerExceptionResolver(
             val responseCode = ErrorResponseCode.fromCode(ex.message)
             response.status = responseCode.httpStatus
 
-            ErrorResponse(responseCode)
+            ErrorResponse(
+                responseCode = responseCode,
+                responseMessage = responseCode.description
+            )
         } else {
-            response.status = ErrorResponseCode.UNKNOWN.httpStatus
+            ErrorResponseCode.UNKNOWN.run {
+                response.status = this.httpStatus
 
-            ErrorResponse(responseMessage = ex.message)
+                ErrorResponse(
+                    responseCode = this,
+                    responseMessage = ex.message
+                )
+            }
         }
 
         val result: String = objectMapper.writeValueAsString(errorResponse)

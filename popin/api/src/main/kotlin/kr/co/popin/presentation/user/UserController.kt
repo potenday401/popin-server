@@ -37,7 +37,8 @@ class UserController (
         error = [
             ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
             ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
-            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_USER)
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_USER),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
         ]
     )
     @Operation(summary = "회원 가입")
@@ -89,7 +90,8 @@ class UserController (
         ],
         error = [
             ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
-            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
         ]
     )
     @Operation(summary = "로그인")
@@ -273,7 +275,9 @@ class UserController (
         error = [
             ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
             ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
-            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
         ]
     )
     @Operation(summary = "비밀번호 변경")

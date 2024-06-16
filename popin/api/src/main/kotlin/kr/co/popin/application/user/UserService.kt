@@ -53,6 +53,13 @@ class UserService (
         validateEmail(userEmail)
         validatePassword(userPassword)
 
+        val user = userPersistenceAdapter.findByEmail(userEmail)
+            ?: throw NotFoundUserException()
+
+        if (!matchesPassword(userPassword, user.password)) {
+            throw IllegalArgumentException(ErrorResponseCode.NOT_MATCHED_PASSWORD.getRealCode())
+        }
+
         return authService.createNewAuthentication(
             email = email,
             password = password
@@ -127,18 +134,21 @@ class UserService (
 
         val currentPassword = UserPassword(aCurrentPassword)
         if (!matchesPassword(currentPassword, user.password)) {
-            throw IllegalArgumentException(ErrorResponseCode.INVALID_PASSWORD.getRealCode())
+            throw IllegalArgumentException(ErrorResponseCode.NOT_MATCHED_PASSWORD.getRealCode())
         }
 
         val changePassword = UserPassword(aChangePassword)
 
         validatePassword(changePassword)
 
+        if (matchesPassword(currentPassword, changePassword)) {
+            throw IllegalArgumentException(ErrorResponseCode.DUPLICATE_PASSWORD.getRealCode())
+        }
+
         val hashedChangePassword = hashPassword(changePassword)
 
         val passwordChangedUser = user.changePassword(hashedChangePassword)
         userPersistenceAdapter.update(passwordChangedUser)
-        // TODO 기존 비밀번호와 동일한 케이스 처리 필요
     }
 
     private fun hashPassword(userPassword: UserPassword): UserPassword {
