@@ -275,6 +275,7 @@ class UserController (
         error = [
             ApiErrorResponseCode(ErrorResponseCode.UNAUTHORIZED),
             ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
             ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
             ApiErrorResponseCode(ErrorResponseCode.DUPLICATE_PASSWORD),
             ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
@@ -294,8 +295,17 @@ class UserController (
             aChangePassword = request.changePassword
         )
 
-        // TODO 비밀번호 변경 후 로그아웃 되어야 하는지 확인 필요
-        return SuccessResponse()
+        val result = userService.login(
+            email = user.username,
+            password = request.changePassword
+        )
+
+        return SuccessResponse(
+            responseData = UserLoginResponse(
+                accessToken = result.accessToken,
+                refreshToken = result.refreshToken
+            )
+        )
     }
 
 }
