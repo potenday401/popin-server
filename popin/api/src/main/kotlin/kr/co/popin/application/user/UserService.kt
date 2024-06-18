@@ -8,7 +8,9 @@ import kr.co.popin.application.exceptions.UserExistsException
 import kr.co.popin.application.external.aws.MailSender
 import kr.co.popin.application.external.aws.dtos.Mail
 import kr.co.popin.application.external.aws.enums.MailType
+import kr.co.popin.domain.model.auth.aggregate.AuthToken
 import kr.co.popin.domain.model.auth.dtos.AuthTokenInfo
+import kr.co.popin.domain.model.auth.enums.AuthTokenType
 import kr.co.popin.domain.model.user.aggregate.User
 import kr.co.popin.domain.model.user.persistence.IUserPersistencePort
 import kr.co.popin.domain.model.user.vo.UserEmail
@@ -65,13 +67,15 @@ class UserService (
     }
 
     @Transactional
-    fun logout(aUserId: String) {
-        val userId = UserId(aUserId)
+    fun logout(accessToken: String) {
+        val removedPrefixAccessToken = accessToken.removePrefix(AuthToken.ACCESS_TOKEN_PREFIX).trim()
 
-        val user = userPersistenceAdapter.findById(userId)
-            ?: throw NotFoundUserException()
+        authService.existCheckAuthToken(
+            aToken = removedPrefixAccessToken,
+            aTokenType = AuthTokenType.ACCESS
+        )
 
-        authService.expireAuthTokens(user.id.id)
+        authService.expireAuthTokens()
     }
 
     @Transactional(readOnly = true)

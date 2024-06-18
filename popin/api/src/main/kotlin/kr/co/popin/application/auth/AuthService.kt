@@ -36,7 +36,11 @@ class AuthService (
     fun createNewAuthentication(userPrincipal: UserPrincipal): AuthTokenInfo {
         val userId = UserId(userPrincipal.getUserId())
 
-        val accessToken = jwtTokenProvider.generateAccessToken(userPrincipal)
+        val accessToken = AuthToken.newAuthToken(
+            userId = userId,
+            token = Token(jwtTokenProvider.generateAccessToken(userPrincipal)),
+            tokenType = AuthTokenType.ACCESS
+        )
 
         val refreshToken = AuthToken.newAuthToken(
             userId = userId,
@@ -44,10 +48,11 @@ class AuthService (
             tokenType = AuthTokenType.REFRESH
         )
 
+        val savedAccessToken = authPersistenceAdapter.save(accessToken)
         val savedRefreshToken = authPersistenceAdapter.save(refreshToken)
 
         return AuthTokenInfo(
-            accessToken = accessToken,
+            accessToken = savedAccessToken.token.token,
             refreshToken = savedRefreshToken.token.token
         )
     }
@@ -75,11 +80,32 @@ class AuthService (
         ) ?: throw NotFoundAuthTokenException()
     }
 
+    @Transactional(readOnly = true)
+    fun existCheckAuthToken(
+        aToken: String,
+        aTokenType: AuthTokenType
+    ) {
+        val userPrincipal = getUserPrincipal()
+
+        this.existCheckAuthToken(
+            aToken = aToken,
+            aTokenType = aTokenType,
+            aUserId = userPrincipal.getUserId()
+        )
+    }
+
     @Transactional
     fun expireAuthTokens(aUserId: String) {
         val userId = UserId(aUserId)
 
         authPersistenceAdapter.deleteAllByUserId(userId)
+    }
+
+    @Transactional
+    fun expireAuthTokens() {
+        val userPrincipal = getUserPrincipal()
+
+        this.expireAuthTokens(userPrincipal.getUserId())
     }
 
     @Transactional
