@@ -130,12 +130,11 @@ class UserController (
         """
     )
     @PostMapping("/logout")
-    fun logoutUser(
-        @Parameter(hidden = true)
-        @RequestHeader(HttpHeaders.AUTHORIZATION)
-        accessToken: String
-    ): SuccessResponse {
-        userService.logout(accessToken)
+    fun logoutUser(): SuccessResponse {
+        val user = getCurrentLoggedUserPrincipal()
+            ?: throw NotFoundAuthTokenException()
+
+        userService.logout(user.getUserId())
 
         return SuccessResponse()
     }
