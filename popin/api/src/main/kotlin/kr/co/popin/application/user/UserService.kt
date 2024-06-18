@@ -148,7 +148,9 @@ class UserService (
         val hashedChangePassword = hashPassword(changePassword)
 
         val passwordChangedUser = user.changePassword(hashedChangePassword)
-        userPersistenceAdapter.update(passwordChangedUser)
+        val savedUser = userPersistenceAdapter.update(passwordChangedUser)
+
+        authService.expireAuthTokens(savedUser.id.id)
     }
 
     private fun hashPassword(userPassword: UserPassword): UserPassword {
