@@ -91,7 +91,7 @@ class JwtTokenProvider (
     }
 
     private fun createToken(claims: Map<String, Any>, subject: String, expirationTime: Long): String {
-        val now = LocalDateTime.now()
+        val now = LocalDateTime.now(jwtProperties.zoneId)
         val expirationDateTime = now.plus(expirationTime, ChronoUnit.MILLIS)
         val issuedAt = Date.from(now.atZone(jwtProperties.zoneId).toInstant())
         val expiration = Date.from(expirationDateTime.atZone(jwtProperties.zoneId).toInstant())
