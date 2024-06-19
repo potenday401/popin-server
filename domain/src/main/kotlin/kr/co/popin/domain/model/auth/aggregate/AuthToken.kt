@@ -28,10 +28,10 @@ data class AuthToken (
         private const val ONE_MINUTE: Long = 60
         private const val ONE_SECOND: Long = 1000
 
-        private const val ACCESS_TOKEN_EXPIRATION_MIN: Long = 120
+        private const val ACCESS_TOKEN_EXPIRATION_MIN: Long = 15
         const val ACCESS_TOKEN_EXPIRATION_MILLIS: Long = ACCESS_TOKEN_EXPIRATION_MIN * ONE_MINUTE * ONE_SECOND
 
-        private const val REFRESH_TOKEN_EXPIRATION_DAY: Long = 14
+        private const val REFRESH_TOKEN_EXPIRATION_DAY: Long = 7
         const val REFRESH_TOKEN_EXPIRATION_MILLIS: Long = REFRESH_TOKEN_EXPIRATION_DAY * ONE_DAY * ONE_HOUR * ONE_MINUTE * ONE_SECOND
 
         fun newAuthToken(
