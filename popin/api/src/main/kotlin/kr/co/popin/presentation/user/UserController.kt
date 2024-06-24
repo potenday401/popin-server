@@ -307,4 +307,38 @@ class UserController (
         )
     }
 
+    @ApiResponseCodes(
+        success = [
+            ApiSuccessResponseCode(SuccessResponseCode.SUCCESS)
+        ],
+        error = [
+            ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
+            ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
+        ]
+    )
+    @Operation(summary = "비밀번호 찾기")
+    @PutMapping("/reset/password")
+    fun resetPassword(
+        @RequestBody request: UserPasswordResetRequest
+    ): SuccessResponse {
+        userService.resetPassword(
+            aUserEmail = request.email,
+            aChangePassword = request.changePassword
+        )
+
+        val result = userService.login(
+            email = request.email,
+            password = request.changePassword
+        )
+
+        return SuccessResponse(
+            responseData = UserLoginResponse(
+                accessToken = result.accessToken,
+                refreshToken = result.refreshToken
+            )
+        )
+    }
+
 }

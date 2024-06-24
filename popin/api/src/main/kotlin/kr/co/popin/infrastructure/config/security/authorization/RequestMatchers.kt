@@ -19,7 +19,8 @@ class RequestMatchers (
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/login"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/send/email/confirm-code"),
         AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/verify/email/confirm-code"),
-        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/refresh")
+        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/users/refresh"),
+        AntPathRequestMatcher.antMatcher(HttpMethod.PUT, "/users/reset/password")
     ).apply {
         if ("prod" !in activeProfiles) {
             add(AntPathRequestMatcher("/docs/**"))
