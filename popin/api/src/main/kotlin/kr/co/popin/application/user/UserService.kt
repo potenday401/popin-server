@@ -149,6 +149,28 @@ class UserService (
         authService.expireAuthTokens(savedUser.id.id)
     }
 
+    @Transactional
+    fun resetPassword(
+        aUserEmail: String,
+        aChangePassword: String
+    ) {
+        val userEmail = UserEmail(aUserEmail)
+
+        val user = userPersistenceAdapter.findByEmail(userEmail)
+            ?: throw NotFoundUserException()
+
+        val changePassword = UserPassword(aChangePassword)
+
+        validatePassword(changePassword)
+
+        val hashedChangePassword = hashPassword(changePassword)
+
+        val passwordChangedUser = user.changePassword(hashedChangePassword)
+        val savedUser = userPersistenceAdapter.update(passwordChangedUser)
+
+        authService.expireAuthTokens(savedUser.id.id)
+    }
+
     private fun hashPassword(userPassword: UserPassword): UserPassword {
         val encodedPassword = passwordEncoder.encode(userPassword.password)
 
