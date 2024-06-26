@@ -313,9 +313,7 @@ class UserController (
         ],
         error = [
             ApiErrorResponseCode(ErrorResponseCode.BAD_REQUEST),
-            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD),
-            ApiErrorResponseCode(ErrorResponseCode.INVALID_EMAIL),
-            ApiErrorResponseCode(ErrorResponseCode.NOT_MATCHED_PASSWORD)
+            ApiErrorResponseCode(ErrorResponseCode.INVALID_PASSWORD)
         ]
     )
     @Operation(summary = "비밀번호 찾기")
@@ -328,17 +326,7 @@ class UserController (
             aChangePassword = request.changePassword
         )
 
-        val result = userService.login(
-            email = request.email,
-            password = request.changePassword
-        )
-
-        return SuccessResponse(
-            responseData = UserLoginResponse(
-                accessToken = result.accessToken,
-                refreshToken = result.refreshToken
-            )
-        )
+        return SuccessResponse()
     }
 
 }
