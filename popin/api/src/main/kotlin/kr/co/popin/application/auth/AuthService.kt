@@ -15,6 +15,7 @@ import kr.co.popin.infrastructure.config.jwt.service.JwtTokenProvider
 import kr.co.popin.infrastructure.config.security.dto.UserPrincipal
 import kr.co.popin.infrastructure.config.security.service.UserDetailsService
 import kr.co.popin.infrastructure.persistence.auth.EmailAuthPersistenceAdapter
+import org.springframework.core.env.Environment
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -30,7 +31,8 @@ class AuthService (
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
     private val authPersistenceAdapter: IAuthTokenPersistencePort,
-    private val emailAuthPersistenceAdapter: EmailAuthPersistenceAdapter
+    private val emailAuthPersistenceAdapter: EmailAuthPersistenceAdapter,
+    private val environment: Environment
 ) {
     @Transactional
     fun createNewAuthentication(userPrincipal: UserPrincipal): AuthTokenInfo {
@@ -110,7 +112,11 @@ class AuthService (
             userEmail = userEmail,
             date = currentDate
         )
-        val toDaySendCount = emailAuthCodes.count()
+        val toDaySendCount = if (environment.activeProfiles.contains("prod")) {
+            emailAuthCodes.count()
+        } else {
+            0
+        }
 
         this.expireEmailAuthCodes(emailAuthCodes)
 
