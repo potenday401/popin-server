@@ -1,38 +1,38 @@
 plugins {
-    `kotlin-spring`()
+    kotlinSpring()
 
-    `spring-boot`()
-    `spring-dependency-management`()
+    springBoot()
+    springDependencyManagement()
 
-    `jooq-gradle-plugin`()
+    jooqGradle()
 }
 
 dependencies {
     implementation(project(":domain"))
 
-    implementation(`spring-boot-starter-web`)
-    implementation(`spring-boot-starter-thymeleaf`)
-    implementation(`spring-boot-configuration-processor`)
+    implementation(SpringBoot.webStarter())
+    implementation(SpringBoot.thymeleafStarter())
+    implementation(SpringBoot.configurationProcessor())
 
-    implementation(`spring-boot-starter-springdoc-webmvc-ui`())
+    implementation(SpringBoot.springdocStarter())
 
-    implementation(`spring-boot-starter-security`)
+    implementation(SpringBoot.securityStarter())
 
-    implementation(`jackson-module-kotlin`)
-    runtimeOnly(`kotlin-logging`())
+    implementation(Jackson.kotlinModule())
+    runtimeOnly(Logger.kotlinLogging())
 
-    implementation(`jjwt-api`())
-    runtimeOnly(`jjwt-impl`())
-    runtimeOnly(`jjwt-jackson`())
+    implementation(JJWT.api())
+    runtimeOnly(JJWT.impl())
+    runtimeOnly(JJWT.jackson())
 
-    implementation(`locationtech-jts-core`())
-    implementation(`spring-boot-starter-jooq`)
+    implementation(Java.topologySuite())
+    implementation(SpringBoot.jooqStarter())
 
-    runtimeOnly(`postgres-connector`())
+    runtimeOnly(Postgres.connector())
 
-    implementation(`aws-sdk-ses`())
-    implementation(`aws-sdk-s3`())
-    implementation(`aws-sdk-s3-transfer-manager`())
-    implementation(`aws-crt`())
-    implementation(`aws-secret-manager-jdbc`())
+    implementation(AmazonWebService.simpleEmailServiceSdk())
+    implementation(AmazonWebService.s3Sdk())
+    implementation(AmazonWebService.s3TransferManagerSdk())
+    implementation(AmazonWebService.crtSdk())
+    implementation(AmazonWebService.secretManagerJdbc())
 }

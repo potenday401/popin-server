@@ -1,80 +1,84 @@
-@file:Suppress("ObjectPropertyName", "FunctionName", "SpellCheckingInspection")
+object Java {
+    fun nativeAccess(version: String = "5.14.0") = "net.java.dev.jna:jna:${version}"
 
-val `kotlin-reflect`
-    get() = "org.jetbrains.kotlin:kotlin-reflect"
-val `kotlin-stdlib`
-    get() = "org.jetbrains.kotlin:kotlin-stdlib"
+    fun topologySuite(version: String = "1.19.0") = "org.locationtech.jts:jts-core:${version}"
+}
 
-val `spring-boot-starter-web`
-    get() = "org.springframework.boot:spring-boot-starter-web"
+object Kotlin {
+    fun reflect() = "org.jetbrains.kotlin:kotlin-reflect"
+    fun stdlib() = "org.jetbrains.kotlin:kotlin-stdlib"
+}
 
-val `spring-boot-starter-thymeleaf`
-    get() = "org.springframework.boot:spring-boot-starter-thymeleaf"
+object SpringBoot {
+    fun webStarter() = "org.springframework.boot:spring-boot-starter-web"
+    fun securityStarter() = "org.springframework.boot:spring-boot-starter-security"
+    fun thymeleafStarter() = "org.springframework.boot:spring-boot-starter-thymeleaf"
+    fun springdocStarter(version: String = "2.4.0") = "org.springdoc:springdoc-openapi-starter-webmvc-ui:${version}"
+    fun jooqStarter() = "org.springframework.boot:spring-boot-starter-jooq"
 
-fun `spring-boot-starter-springdoc-webmvc-ui`(version: String = Versions.SPRINGDOC) =
-    "org.springdoc:springdoc-openapi-starter-webmvc-ui:${version}"
+    fun configurationProcessor() = "org.springframework.boot:spring-boot-configuration-processor"
+}
 
-val `jackson-module-kotlin`
-    get() = "com.fasterxml.jackson.module:jackson-module-kotlin"
+object Apache {
+    fun ant(version: String = "1.10.14") = "org.apache.ant:ant:${version}"
+}
 
-fun `kotlin-logging`(version: String = "3.0.5") =
-    "io.github.microutils:kotlin-logging-jvm:$version"
+object Netty {
+    fun macOsNativeDns(
+        version: String = "4.1.107.Final",
+        classifier: String? = null
+    ) = "io.netty:netty-resolver-dns-native-macos:${version}${if (classifier != null) ":${classifier}" else ""}"
+}
 
-val `spring-boot-configuration-processor`
-    get() = "org.springframework.boot:spring-boot-configuration-processor"
+object JJWT {
+    private const val JJWT_VERSION = "0.12.5"
 
-val `spring-boot-starter-security`
-    get() = "org.springframework.boot:spring-boot-starter-security"
+    fun api(version: String = JJWT_VERSION) = "io.jsonwebtoken:jjwt-api:${version}"
+    fun impl(version: String = JJWT_VERSION) = "io.jsonwebtoken:jjwt-impl:${version}"
+    fun jackson(version: String = JJWT_VERSION) = "io.jsonwebtoken:jjwt-jackson:${version}"
+}
 
-val `spring-boot-starter-jooq`
-    get() = "org.springframework.boot:spring-boot-starter-jooq"
-val `jooq-meta-extensions`
-    get() = "org.jooq:jooq-meta-extensions"
+object Jackson {
+    fun kotlinModule() = "com.fasterxml.jackson.module:jackson-module-kotlin"
+}
 
-fun `netty-dns-macos`(
-    version: String = Versions.NETTY_DNS_MACOS,
-    classifier: String? = null
-) = "io.netty:netty-resolver-dns-native-macos:${version}${if (classifier != null) ":${classifier}" else ""}"
+object Postgres {
+    fun connector(version: String = "42.7.2") = "org.postgresql:postgresql:${version}"
+}
 
-fun `uuid-generator`(
-    version: String = Versions.UUID_GENERATOR
-) = "com.github.f4b6a3:uuid-creator:${version}"
+object Postgis {
+    fun jdbc(version: String = "2023.1.0") = "net.postgis:postgis-jdbc:${version}"
+}
 
-fun `postgres-connector`(version: String = Versions.POSTGRES) =
-    "org.postgresql:postgresql:${version}"
+object Jooq {
+    fun metaExtensions() = "org.jooq:jooq-meta-extensions"
+}
 
-fun `postgis-jdbc`(version: String = "2023.1.0") = "net.postgis:postgis-jdbc:$version"
+object Flyway {
+    fun postgres(version: String = Versions.FLYWAY) = "org.flywaydb:flyway-database-postgresql:${version}"
+}
 
-fun `testcontainer-postgres`(version: String = Versions.TESTCONTAINER) =
-    "org.testcontainers:postgresql:${version}"
+object UUID {
+    fun generator(version: String = "5.3.7") = "com.github.f4b6a3:uuid-creator:${version}"
+}
 
-fun `flyway-postgres`(version: String = Versions.FLYWAY) =
-    "org.flywaydb:flyway-database-postgresql:${version}"
+object AmazonWebService {
+    private const val S3_SDK_VERSION = "2.25.24"
 
-fun `apache-ant`(version: String = Versions.APACHE_ANT) =
-    "org.apache.ant:ant:${version}"
+    fun simpleEmailServiceSdk(version: String = "1.12.682") = "com.amazonaws:aws-java-sdk-ses:${version}"
 
-fun `java-native-access`(version: String = Versions.JAVA_NATIVE_ACCESS) =
-    "net.java.dev.jna:jna:${version}"
+    fun s3Sdk(version: String = S3_SDK_VERSION) = "software.amazon.awssdk:s3:${version}"
+    fun s3TransferManagerSdk(version: String = S3_SDK_VERSION) = "software.amazon.awssdk:s3-transfer-manager:${version}"
 
-fun `jjwt-api`(version: String = Versions.JJWT) =
-    "io.jsonwebtoken:jjwt-api:${version}"
+    fun secretManagerJdbc(version: String = "2.0.2") = "com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:${version}"
 
-fun `jjwt-impl`(version: String = Versions.JJWT) =
-    "io.jsonwebtoken:jjwt-impl:${version}"
+    fun crtSdk(version: String = "0.29.14") = "software.amazon.awssdk.crt:aws-crt:${version}"
+}
 
-fun `jjwt-jackson`(version: String = Versions.JJWT) =
-    "io.jsonwebtoken:jjwt-jackson:${version}"
+object Logger {
+    fun kotlinLogging(version: String = "3.0.5") = "io.github.microutils:kotlin-logging-jvm:${version}"
+}
 
-fun `aws-sdk-ses`(version: String = Versions.AWS_SDK) =
-    "com.amazonaws:aws-java-sdk-ses:${version}"
-
-fun `aws-secret-manager-jdbc`(version: String = Versions.AWS_SECRET_MAMAGER_JDBC) =
-    "com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:${version}"
-
-fun `aws-sdk-s3`(version: String = "2.25.24") = "software.amazon.awssdk:s3:$version"
-fun `aws-sdk-s3-transfer-manager`(version: String = "2.25.24") = "software.amazon.awssdk:s3-transfer-manager:$version"
-fun `aws-crt`(version: String = "0.29.14") = "software.amazon.awssdk.crt:aws-crt:$version"
-
-
-fun `locationtech-jts-core`(version: String = Versions.JTS_CORE) = "org.locationtech.jts:jts-core:${version}"
+object TestContainer {
+    fun postgres(version: String = "1.19.6") = "org.testcontainers:postgresql:${version}"
+}
