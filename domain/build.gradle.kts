@@ -14,24 +14,24 @@ plugins {
 }
 
 dependencies {
-    implementation(UUID.generator())
-    implementation(Java.topologySuite())
-    implementation(Jooq.metaExtensions())
-    implementation(Postgis.jdbc())
-    jooqGenerator(Postgres.connector())
+    implementation(F4b6a3.uuidCreator())
+    implementation(Locationtech.jtsCore())
+    implementation(Jooq.jooqMetaExtensions())
+    implementation(Postgis.postgisJdbc())
+    jooqGenerator(Postgresql.postgresql())
 }
 
 buildscript {
     dependencies {
-        classpath(TestContainer.postgres())
-        classpath(Postgres.connector())
+        classpath(TestContainers.postgresql())
+        classpath(Postgresql.postgresql())
         classpath(Apache.ant())
 
         if (org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC)) {
-            classpath(Java.nativeAccess())
+            classpath(Java.jna())
         }
 
-        classpath(Flyway.postgres())
+        classpath(Flywaydb.flywayDatabasePostgresql())
     }
 }
 

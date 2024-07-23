@@ -25,8 +25,8 @@ subprojects {
 		java.sourceCompatibility = JavaVersion.VERSION_21
 
 		dependencies {
-			implementation(Kotlin.reflect())
-			implementation(Kotlin.stdlib())
+			implementation(Jetbrains.kotlinReflect())
+			implementation(Jetbrains.kotlinStdlib())
 
 			Os.isFamily(Os.FAMILY_MAC).ifTrue {
 				when {
@@ -34,7 +34,7 @@ subprojects {
 					Os.isArch("aarch64") -> "osx-aarch_64"
 					else -> null
 				}?.let { classifier ->
-					runtimeOnly(Netty.macOsNativeDns(classifier = classifier))
+					runtimeOnly(Netty.nettyResolverDnsNativeMacos(classifier = classifier))
 				}
 			}
 		}

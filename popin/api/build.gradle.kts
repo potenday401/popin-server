@@ -10,29 +10,29 @@ plugins {
 dependencies {
     implementation(project(":domain"))
 
-    implementation(SpringBoot.webStarter())
-    implementation(SpringBoot.thymeleafStarter())
-    implementation(SpringBoot.configurationProcessor())
+    implementation(Springframework.springBootStarterWeb())
+    implementation(Springframework.springBootStarterThymeleaf())
+    implementation(Springframework.springBootConfigurationProcessor())
 
-    implementation(SpringBoot.springdocStarter())
+    implementation(Springframework.springdocOpenapiStarterWebmvcUi())
 
-    implementation(SpringBoot.securityStarter())
+    implementation(Springframework.springBootStarterSecurity())
 
-    implementation(Jackson.kotlinModule())
-    runtimeOnly(Logger.kotlinLogging())
+    implementation(Fasterxml.jacksonModuleKotlin())
+    runtimeOnly(Microutils.kotlinLoggingJvm())
 
-    implementation(JJWT.api())
-    runtimeOnly(JJWT.impl())
-    runtimeOnly(JJWT.jackson())
+    implementation(Jsonwebtoken.jjwtApi())
+    runtimeOnly(Jsonwebtoken.jjwtImpl())
+    runtimeOnly(Jsonwebtoken.jjwtJackson())
 
-    implementation(Java.topologySuite())
-    implementation(SpringBoot.jooqStarter())
+    implementation(Locationtech.jtsCore())
+    implementation(Springframework.springBootStarterJooq())
 
-    runtimeOnly(Postgres.connector())
+    runtimeOnly(Postgresql.postgresql())
 
-    implementation(AmazonWebService.simpleEmailServiceSdk())
-    implementation(AmazonWebService.s3Sdk())
-    implementation(AmazonWebService.s3TransferManagerSdk())
-    implementation(AmazonWebService.crtSdk())
-    implementation(AmazonWebService.secretManagerJdbc())
+    implementation(Amazonaws.awsJavaSdkSes())
+    implementation(Amazonaws.s3())
+    implementation(Amazonaws.s3TransferManager())
+    implementation(Amazonaws.awsCrt())
+    implementation(Amazonaws.awsSecretsManagerJdbc())
 }
