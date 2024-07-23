@@ -1,38 +1,38 @@
 plugins {
-    `kotlin-spring`()
+    kotlinSpring()
 
-    `spring-boot`()
-    `spring-dependency-management`()
+    springBoot()
+    springDependencyManagement()
 
-    `jooq-gradle-plugin`()
+    jooqGradle()
 }
 
 dependencies {
     implementation(project(":domain"))
 
-    implementation(`spring-boot-starter-web`)
-    implementation(`spring-boot-starter-thymeleaf`)
-    implementation(`spring-boot-configuration-processor`)
+    implementation(Springframework.springBootStarterWeb())
+    implementation(Springframework.springBootStarterThymeleaf())
+    implementation(Springframework.springBootConfigurationProcessor())
 
-    implementation(`spring-boot-starter-springdoc-webmvc-ui`())
+    implementation(Springframework.springdocOpenapiStarterWebmvcUi())
 
-    implementation(`spring-boot-starter-security`)
+    implementation(Springframework.springBootStarterSecurity())
 
-    implementation(`jackson-module-kotlin`)
-    runtimeOnly(`kotlin-logging`())
+    implementation(Fasterxml.jacksonModuleKotlin())
+    runtimeOnly(Microutils.kotlinLoggingJvm())
 
-    implementation(`jjwt-api`())
-    runtimeOnly(`jjwt-impl`())
-    runtimeOnly(`jjwt-jackson`())
+    implementation(Jsonwebtoken.jjwtApi())
+    runtimeOnly(Jsonwebtoken.jjwtImpl())
+    runtimeOnly(Jsonwebtoken.jjwtJackson())
 
-    implementation(`locationtech-jts-core`())
-    implementation(`spring-boot-starter-jooq`)
+    implementation(Locationtech.jtsCore())
+    implementation(Springframework.springBootStarterJooq())
 
-    runtimeOnly(`postgres-connector`())
+    runtimeOnly(Postgresql.postgresql())
 
-    implementation(`aws-sdk-ses`())
-    implementation(`aws-sdk-s3`())
-    implementation(`aws-sdk-s3-transfer-manager`())
-    implementation(`aws-crt`())
-    implementation(`aws-secret-manager-jdbc`())
+    implementation(Amazonaws.awsJavaSdkSes())
+    implementation(Amazonaws.s3())
+    implementation(Amazonaws.s3TransferManager())
+    implementation(Amazonaws.awsCrt())
+    implementation(Amazonaws.awsSecretsManagerJdbc())
 }

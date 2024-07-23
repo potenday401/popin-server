@@ -1,9 +1,10 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 plugins {
-	`kotlin-jvm`()
-	`kotlin-kapt`()
+	kotlinJvm()
+	kotlinKapt()
 }
 
 allprojects {
@@ -24,16 +25,16 @@ subprojects {
 		java.sourceCompatibility = JavaVersion.VERSION_21
 
 		dependencies {
-			implementation(`kotlin-reflect`)
-			implementation(`kotlin-stdlib`)
+			implementation(Jetbrains.kotlinReflect())
+			implementation(Jetbrains.kotlinStdlib())
 
-			if (Os.isArch("x86_64")) {
-				if (Os.isFamily(Os.FAMILY_MAC)) {
-					runtimeOnly(`netty-dns-macos`(classifier = "osx-x86_64"))
-				}
-			} else if (Os.isArch("aarch64")) {
-				if (Os.isFamily(Os.FAMILY_MAC)) {
-					runtimeOnly(`netty-dns-macos`(classifier = "osx-aarch_64"))
+			Os.isFamily(Os.FAMILY_MAC).ifTrue {
+				when {
+					Os.isArch("x86_64") -> "osx-x86_64"
+					Os.isArch("aarch64") -> "osx-aarch_64"
+					else -> null
+				}?.let { classifier ->
+					runtimeOnly(Netty.nettyResolverDnsNativeMacos(classifier = classifier))
 				}
 			}
 		}

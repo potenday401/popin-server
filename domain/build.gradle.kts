@@ -9,29 +9,29 @@ import org.testcontainers.utility.DockerImageName
 import org.postgresql.Driver as PostgresDriver
 
 plugins {
-    `jooq-gradle-plugin`()
-    `flyway-gradle-plugin`()
+    jooqGradle()
+    flywayGradle()
 }
 
 dependencies {
-    implementation(`uuid-generator`())
-    implementation(`locationtech-jts-core`())
-    implementation(`jooq-meta-extensions`)
-    implementation(`postgis-jdbc`())
-    jooqGenerator(`postgres-connector`())
+    implementation(F4b6a3.uuidCreator())
+    implementation(Locationtech.jtsCore())
+    implementation(Jooq.jooqMetaExtensions())
+    implementation(Postgis.postgisJdbc())
+    jooqGenerator(Postgresql.postgresql())
 }
 
 buildscript {
     dependencies {
-        classpath(`testcontainer-postgres`())
-        classpath(`postgres-connector`())
-        classpath(`apache-ant`())
+        classpath(TestContainers.postgresql())
+        classpath(Postgresql.postgresql())
+        classpath(Apache.ant())
 
         if (org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC)) {
-            classpath(`java-native-access`())
+            classpath(Java.jna())
         }
 
-        classpath(`flyway-postgres`())
+        classpath(Flywaydb.flywayDatabasePostgresql())
     }
 }
 
